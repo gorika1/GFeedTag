@@ -1,0 +1,4 @@
+RewriteEngine On
+DirectoryIndex process.php
+
+RewriteRule ^(\w+)$ process.php?action=$1

@@ -1,0 +1,99 @@
+
+
+body {
+    background: #f8f8f8;
+   
+}
+
+strong { font-weight: 700; }
+a:hover { text-decoration: none; }
+
+.header {
+    margin: 0 auto;
+    padding-bottom: 5px;
+    background: #f8f8f8 url(../images/pattern.jpg) left top repeat;
+    border-top: 3px solid #eb4141;
+    -moz-box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
+    -webkit-box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
+    box-shadow: 0 1px 5px 0 rgba(0,0,0,.3)
+}
+
+.contenedor-fotos h1 {
+    font-family: 'PT Sans', cursive;
+    font-size: 36px;
+    font-weight: 400;
+    color: black;
+    margin-top: 0px;
+}
+
+
+.contenedor-fotos{
+    background: #f8f8f8 url(../images/pattern.jpg) left top repeat;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+    -moz-box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
+    -webkit-box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
+    box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
+    text-align: center;
+    position: absolute;
+    top: 54%; /* Buscamos el centro horizontal (relativo) del navegador */
+    left: 50%; /* Buscamos el centro vertical (relativo) del navegador */
+    width: 34.375em; /* Definimos el ancho del objeto a centrar */
+    height: 39.500em; /* Definimos el alto del objeto a centrar */
+    margin-top: -300px; /* Restamos la mitad de la altura del objeto con un margin-top */
+    margin-left: -275px; /* Restamos la mitad de la anchura del objeto con un margin-left */
+}
+.contenedor-fotos h2{
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px dotted #bbb;
+    font-size: 30px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.hash-fotos img{
+    width: 27.000em;
+    height: 27.000em;
+    display: block;
+    margin: 0 auto 0 auto;
+
+}
+.feedtag-texto{
+    margin-top: 10px;
+}
+span.texto{
+    font-size: 27px;
+    color: rgb(82, 82, 82);
+    font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+}
+span.hashtag-style{
+    color: red;
+
+}
+
+/* ----- Media queries ----- */
+
+
+@media (max-width: 767px) {
+
+    body { padding-left: 0; padding-right: 0; }
+
+    .logo, .links { text-align: center; }
+
+    .links { padding-bottom: 5px; }
+
+
+    .links a.home { margin-left: 0; }
+
+    .links a.blog { margin-right: 0; }
+
+    .contenedor-fotos { padding-left: 20px; padding-right: 20px; }
+
+
+
+}
+
+
+
