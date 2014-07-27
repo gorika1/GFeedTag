@@ -1,4 +1,8 @@
 RewriteEngine On
 DirectoryIndex process.php
+#SEO para la ficha de los cursos
+RewriteRule ^admin/(\w+)/?$ process.php?action=$1
+RewriteRule ^([\w+\-]+)/?$ process.php?action=$1
+RewriteRule ^([\w+\-]+)/([\w+\-]+)/?$ process.php?action=$1&code=$2
 
-RewriteRule ^(\w+)$ process.php?action=$1
+

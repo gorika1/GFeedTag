@@ -30,7 +30,7 @@ class CurlHttpClient {
      * Initiate a cURL session
      * @param string $url
      */
-    public function __construct($uri) {
+    public function __construct( $uri ) {
         $this->handler = curl_init($uri);
         $this->_setOptions();
     }
@@ -93,10 +93,27 @@ class CurlHttpClient {
      * @return string
      */
     public function getResponse() {
-        $response = curl_exec($this->handler);
-        curl_close($this->handler);
+        try {
+            curl_setopt ($this->handler, CURLOPT_CAINFO, "cacert.pem");
+            $content = curl_exec($this->handler);
 
-        return $response;
+            if (FALSE === $content)
+                throw new \Exception(curl_error($this->handler), curl_errno($this->handler));
+
+            $response = curl_exec( $this->handler );
+            var_dump( $response );
+            curl_close($this->handler);
+
+            return $response;
+            // ...process $content now
+        } catch( \Exception $e) {
+
+            trigger_error(sprintf(
+                'Curl failed with error #%d: %s',
+                $e->getCode(), $e->getMessage()),
+                E_USER_ERROR);
+
+        }
     }
 
     /**

@@ -1,28 +1,47 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		{HEAD}
-		<!-- CSS -->
-        <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=PT+Sans:400,700'>
-        <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Oleo+Script:400,700'>
-	</head>
+<html lang="en">
+<head>
+    
+    {HEAD}
+    <link lhref="client/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" lhref="client/css/view-media/feedtag.css">
+    <script type="text/javascript" lsrc="client/js/view-media/jquery-1.8.2.min.js"></script>
+    <script lsrc="client/js/view-media/jquery.carouFredSel-6.0.4-packed.js"></script>
+    <script type="text/javascript" lsrc="client/js/view-media/jquery.blockUI.js"></script>
+    <script lsrc="client/js/view-media/scripts.js"></script>
+    <script type="text/javascript" lsrc="client/js/view-media/app.js"></script>
+</head>
+    <body>
+        
+        <input type="hidden" id="last-time" time="{LastTime}" last-pos="{LastPosition}"/>
 
-	<body>
-		<div class="contenedor-fotos">
-            <h1>@GVSanz</h1>
-            <div class="hash-fotos">
-                <img src="https://scontent-b-mia.xx.fbcdn.net/hphotos-prn2/t1.0-9/1622624_545144882251592_1901989071_n.jpg">
+        <div id="bg">
+            <div id="outer2">
+                <img id="bg-back" src="" />
             </div>
-        <div id="feedtag-texto">
-            <span class="texto">Texto <span class="hashtag-style">#COYOTE</span> mas texto</span>
-        </div>
+    
+            <div id="outer">
+                <div id="inner">
+                    <div class="social-icon">
+                        <span class="fa fa-twitter">
+                            
+                        </span>
+                        <img class="visible" lsrc="client/images/instagram_icon.png" alt="">
+                    </div>
+                    
+                    <h1 id="screen-name">
+                    </h1>
+                    
+                    <div id="visor">
+                        <img src="" />
+                    </div>
+                    <div id="carousel">
+                    </div>
 
-               
+                    <div id="text">
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <!-- Javascript -->
-        <script lsrc="client/js/bootstrap.min.js"></script>
-        <script lsrc="client/js/jquery.backstretch.min.js"></script>
-        <script lsrc="client/js/scripts.js"></script>
-	</body>
+    </body>
 </html>

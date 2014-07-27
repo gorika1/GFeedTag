@@ -1,0 +1,129 @@
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+body {
+    background: #777;
+}
+body * {
+    font-family: Arial, Geneva, SunSans-Regular, sans-serif;
+    font-size: 14px;
+    color: #222;
+    line-height: 20px;
+}
+
+#bg {
+    position: absolute;
+    overflow: hidden;
+    z-index: -9999;
+    width: 100%; 
+    height: 100%;
+}
+
+#outer {
+    width: 100%;
+    height: 100%;
+    min-width: 700px;
+    min-height: 600px;
+    position: relative;
+}
+
+#outer2 {
+    background: #f8f8f8 no-repeat center center fixed;
+    position: absolute;
+}
+
+#outer2 img {
+    background: #f8f8f8 no-repeat center center fixed;
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(3px);
+    -o-filter: blur(3px);
+    -ms-filter: blur(3px);
+    filter: blur(5px); 
+    filter:blur(add = 8, direction = 300, strength = 10);
+    filter: url('blur.svg#blur');
+}
+
+#inner {
+    background: #f8f8f8 url(../../images/pattern.jpg) left top repeat;
+    border-radius: .5em;
+    box-shadow: 0 0 20px #000;    
+    margin-top: 10px;
+    position: absolute;
+}
+
+#carousel img {
+    visibility: hidden;
+}
+
+#visor img {
+    display: block;
+    max-height: 80%;
+    max-width: 90%;
+    position: absolute;
+}
+
+.social-icon {
+    background: #f8f8f8;
+    box-shadow: 0 0 10px #000;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    position: absolute;
+    right: -13px;
+    top: -13px;
+}
+
+.social-icon .fa {
+    color: #00a2db;
+    font-size: 34px;
+    position: absolute;
+    top: 20%;
+    left: 20%;
+}
+
+.social-icon img {
+    height: 34px;
+    margin-top: 8px;
+    margin-left: 8px;
+    visibility: hidden;
+}
+
+.social-icon img.visible {
+    visibility: inherit;
+}
+
+#screen-name {
+    font: 34px/40px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #00a2db;
+    font-weight: 200;
+    margin-top: 5px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+#text {
+    background: #f8f8f8;
+    font-size: 27px;
+    color: rgb(82, 82, 82);
+    font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+    line-height: 28px;
+    padding: 7px 10px 2px;
+    bottom: .5em;
+    text-align: center;
+    position: absolute;
+    z-index: 5;
+    width: 100%;
+}
+
+@media(max-height: 650px){
+    #text {
+        bottom: .3em;
+    }
+}
+#text .hashtag {
+    color: red;
+    font-size: 27px;
+    font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+}

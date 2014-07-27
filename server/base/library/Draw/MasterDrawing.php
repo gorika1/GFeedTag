@@ -4,27 +4,23 @@ namespace Gear\Draw;
 
 class MasterDrawing
 {
-	protected $drawer; // replica del objeto drawer
-	protected $login; // replica del objeto login
-	protected $className; // nombre de la clase hija que utiliza las funciones genericas
+	protected $folder; // replica la variable global folder de process.php
 
 	protected $template;
 
 	public function __construct()
 	{
-		//Clona los datos de login si existe
-		global $login;
-		if( isset( $login ) )
-			$this->login = $login;
-
-		$this->className = str_replace( 'Drawing', '', get_class( $this ) );
+		global $folder;
+		$this->folder = $folder;
 	}//end __construct
 
 
 	public function setTemplate()
 	{
+		global $folder;
+
 		//Establece el directorio de las listas de una vista		
-		$this->template = file_get_contents( 'client/html/master/' . lcfirst( $this->className ) . '/' . lcfirst( $this->className ) . '.html' );
+		$this->template = file_get_contents( 'client/html/master/' . $folder . '/' . lcfirst( $this->className ) . '.html' );
 	}
 
 	public function translateConst()

@@ -37,16 +37,8 @@ class Drawer extends Template {
 			//se itera por los datos pasados y se guarda entre el drawing constante
 			foreach ( $masterPage[ 'Extras' ] as $key => $value ) 
 			{
-				if( is_file( $uri . $value .'.html' ) )
-				{
-					$template = file_get_contents( $uri . $value .'.html' );
-					$this->setDrawConst( $template, $key );
-				}
-				else
-				{
-					echo "El archivo " . $uri . $value .'.html' . ' configurado en el Master Page no existe';
-				}
-				
+				$template = file_get_contents( $uri . $value .'.html' );
+				$this->setDrawConst( $template, $key );
 			}//end foreach
 		}//end if
 
@@ -127,7 +119,7 @@ class Drawer extends Template {
 			$template = $this->drawList( $array, $template );
 			return $template;
 		}//end if
-		
+
 		//Crea el diccionario para las principales partes de una pagina
 		$this->principalDraw();
 
@@ -135,6 +127,7 @@ class Drawer extends Template {
 		$this->createDrawing( $array );			
 
 		foreach( $this->drawing as $key => $valor ) {
+
 			//Obtiene el template mediante el metodo getPage de la clase Index y lo traduce. Y utiliza el metodo setPage de la clase Index para establecer la pagina.
 			$this->setPage( str_replace( '{'.$key.'}', $valor, $this->getPage() ) );
 
@@ -143,7 +136,7 @@ class Drawer extends Template {
 		$this->drawLocal();//Traduce los vinculos a archivos locales en el servidor
 
 		//Imprime la página traducida
-		echo $this->getPage();
+		echo $this->getPage();	
 
 	}//end draw
 

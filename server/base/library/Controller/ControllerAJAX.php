@@ -24,7 +24,10 @@ class ControllerAJAX
 				if( $i + 1 < sizeof( $parameters ) ) //Si el indice actual no es el ultimo
 					$argumentos = $argumentos . "'" . $parameters[ $i ] . "'" . ', '; //genera el string de los valores a pasar
 				else
+				{
 					$argumentos = $argumentos . "'" . $parameters[ $i ] . "'";
+				} // end if..else
+					
 			} // end for
 			$argumentos = $argumentos . ', '. 1;
 
@@ -33,7 +36,6 @@ class ControllerAJAX
 		else
 			$value = eval( "\$returns = \$objDrawing->draw".$method.'();' );
 
-		
 		echo json_encode( $returns );
 	}//end callDraw
 
