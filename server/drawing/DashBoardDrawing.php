@@ -5,4 +5,4 @@ use Gear\Draw\Drawing;
 class DashBoardDrawing extends Drawing
 {
 	
-} // end AdminDrawing
+} // end DashBoardDrawing
