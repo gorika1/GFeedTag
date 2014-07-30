@@ -1,22 +1,31 @@
 <?php
 
 use Gear\Controller\ControllerAJAX;
-use Gear\Db\GMySqli;
-use Gear\SocialApis\Twitter;
+require_once 'server/model/AdminModel.php';
 
 class DashBoardController extends ControllerAJAX 
 {
 
 	public function __construct()
 	{
+		// Si no esta logueado
 		if( !isset( $_SESSION[ 'user'] ) )
 		{
-			header( 'Location: login' );
+			header( 'Location: ../login' );
 		}
 		else
 		{
 			$drawing = new DashBoardDrawing();
-			$drawing->drawPage( 'Administrar FeedTag' );
+
+			// Obtiene la cuenta de la cantidad de fotos en instagram y twitter
+			$myAdmin = new AdminModel();
+			$counter = $myAdmin->getRecount();
+
+			$drawing->drawPage( 'DashBoard | FeedTag', null,
+								array(
+										'CantidadInsta' => $counter[ 'insta' ],
+										'CantidadTwitter' => $counter[ 'twitter' ],
+									) );
 		} // end if...else
 	} // end __construct
 

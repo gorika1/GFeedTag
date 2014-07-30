@@ -307,11 +307,11 @@ class GMySqli
 //*******************************************************
 
 
-	static function getCountRegisters( $from, $campos = '*', $where = null )
+	static function getCountRegisters( $from, $campo = '*', $where = null )
 	{
 		self::checkMysqli();
 		
-		self::$query = "SELECT COUNT( ".$campos." ) FROM ".$from;
+		self::$query = "SELECT COUNT( ".$campo." ) FROM ".$from;
 		
 		if( isset( $where ) )
 			self::$query = self::$query." WHERE ".$where;

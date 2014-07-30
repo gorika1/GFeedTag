@@ -15,7 +15,7 @@ $( document ).on( 'ready', function(){
 			success: function( data ) {				
 				if( data != 'false' )
 				{
-					window.location = 'admin';	
+					window.location = 'admin/dashboard';	
 				}
 			},
 			type: 'POST',
