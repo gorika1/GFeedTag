@@ -32,12 +32,13 @@ class LoginController
 
 		if( !$account )
 		{
-			echo 'false';
+			echo 'El nombre de usuario o contraseña no existe';
 		}
 		else
 		{
 			$_SESSION[ 'user' ] = $account[ 'user' ];
 			$_SESSION[ 'idUser' ] = $account[ 'idUser' ];
+			echo 'true';
 		} // end if...else
 		
 	} // end login

@@ -32,7 +32,6 @@
 	top: 2px;
 	left: 10px;
 	display: inline-block;
-	margin-right: 3em;
 	font-size: 18px;
 	font-weight: 300;
 	color: #fff;
@@ -320,9 +319,7 @@ ul.messages_layout .dropdown-menu li {
 /**************************************************************************
 /**************************************************************************
 /**************************************************************************/
-#hashtag-label {
-	float: left;
-}
+
 
 #hashtag-input {
 	margin-right: 0;

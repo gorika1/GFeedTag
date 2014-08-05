@@ -12,10 +12,15 @@ $( document ).on( 'ready', function(){
 			error: function() {
 				alert( 'Ha ocurrido un error' );
 			},
-			success: function( data ) {				
-				if( data != 'false' )
+			success: function( data ) {
+				// Si se creo la sesión		
+				if( data === 'true')
 				{
 					window.location = 'admin/dashboard';	
+				}
+				else
+				{
+					console.log( data );
 				}
 			},
 			type: 'POST',

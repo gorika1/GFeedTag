@@ -6,6 +6,8 @@
         <link lhref="client/css/font-awesome.min.css" rel="stylesheet" media="screen">
         <link lhref="client/css/admin/style.css" rel="stylesheet">
         <link lhref="client/css/admin/dashboard.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" lhref="client/css/admin/gallery/lightbox/lightbox.css" />
+        <script type="text/javascript" lsrc="client/js/gallery/lightbox.min.js"></script>
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -37,25 +39,7 @@
                                 </div>
                                 <div class="widget-content">
                                     <div id="examples" class="section examples-section">
-                                        <div class="col-sm-4 col-md-2">
-                                            <div class="image-row">
-                                                <div class="image-set">
-                                                    <a class="example-image-link" href="img/gallery-photo/image-1.jpg" data-lightbox="example-set" title="Click on the right side of the image to move forward."> 
-                                                        <img class="example-image" src="img/gallery-photo/thumb-1.jpg" alt="Plants: image 1 0f 4 thumb" width="150" height="150"/>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-4 col-md-2">
-                                            <div class="image-row">
-                                                <div class="image-set"> 
-                                                    <a class="example-image-link" href="img/gallery-photo/image-2.jpg" data-lightbox="example-set" title="Click on the right side of the image to move forward."> 
-                                                        <img class="example-image" src="img/gallery-photo/thumb-2.jpg" alt="Plants: image 1 0f 4 thumb" width="150" height="150"/>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>                
+                                        {ListaImagenes}                
                                     </div>
                                 </div>
                             </div>

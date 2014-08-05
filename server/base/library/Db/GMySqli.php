@@ -70,8 +70,10 @@ class GMySqli
 			if( $result = self::$mysqli->query( self::$query ) )//Si se realiza la consulta correctamente
 				self::$registers = true;//register se convierte en una variable booleana que indica el exito de la operacion
 			else
+			{
 				self::$registers = false;//o false en caso de haber algun error
-
+				throw new \Exception( 'Error ' . self::$mysqli->errno . ': ' . self::$mysqli->error );
+			} // end if...else
 		}//end if..else externo
 
 
@@ -200,7 +202,7 @@ class GMySqli
 			if( is_array( $campos ) )
 			{
 				$size = $sizeof( $campos );
-				// Guarda el ultimo indice para poder cerrar el parentesis
+				// Guarda el valor del ultimo indice para poder cerrar el parentesis
 				$last = $size - 1;
 
 				self::$query = self::$query . ' ( ';
@@ -263,9 +265,9 @@ class GMySqli
 		foreach ( $set as $key => $value ) 
 		{
 			if( $count < $size )
-				self::$query .= $key . " = " . $value . ', ';
+				self::$query .= $key . " = '" . $value . "', ";
 			else
-				self::$query .= $key . " = " . $value . ' WHERE ';
+				self::$query .= $key . " = '" . $value . "' WHERE ";
 
 			$count += 1;
 		} // end foreach
@@ -282,23 +284,12 @@ class GMySqli
 //*****************************************************************
 
 
-	static function deleteRegister( $table, $where = null ) 
-	{
-		if( !isset( $where ) )
-		{
-			echo "<script>
-				alert( 'Si no pasa un sentencia where, no se puedo realizar la accion' );
-			</script>";
-			
-			$bool = false;
-		}//end if
-		else
-		{
-			self::$query = "DELETE FROM ".$table.
-			" WHERE ".$where;
-			
-			$bool = self::execQuery( self::$query );
-		}//end else
+	static function deleteRegister( $table, $where ) 
+	{		
+		self::$query = "DELETE FROM ".$table.
+		" WHERE ".$where;
+		
+		$bool = self::execQuery( self::$query );
 		
 		return $bool;
 	}//end deleteRegister

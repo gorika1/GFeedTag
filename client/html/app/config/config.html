@@ -6,6 +6,13 @@
         <link lhref="client/css/font-awesome.min.css" rel="stylesheet" media="screen">
         <link lhref="client/css/admin/style.css" rel="stylesheet">
         <link lhref="client/css/admin/dashboard.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" lhref="client/css/admin/config/config.css" />
+        <link rel="stylesheet" type="text/css" lhref="client/css/admin/config/jquery.mCustomScrollbar.css" />
+        <script type="text/javascript" lsrc="client/js/plugins/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" lsrc="client/js/plugins/jquery.blockUI.js"></script>
+        <script type="text/javascript" lsrc="client/js/plugins/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" lsrc="client/js/config/jquery.mCustomScrollbar.concat.min.js"></script>
+
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -15,132 +22,155 @@
 
     </head>
     <body>
-        
         {HEADER}
         <div class="wrapper">
             {NAV}
            
             <div class="page-content">
                 <div class="content container">
+                    <!-- TITULO SUPERIOR -->
                     <div class="row">
                         <div class="col-md-12">
                             <h2 class="page-title">Configuraciones</h2>
                         </div>
                     </div>
+                    <!-- ./ TITULO SUPERIOR -->
+                    <!-- ROW PRINCIPAL -->
                     <div class="row">
-                        <div class="col-lg-6">
-                            <div class="widget">
-                                <div class="widget-header"> 
-                                    <i class="icon-align-left"></i>
-                                    <h3>Configuracion de Instagram y Twitter</h3>
-                                </div>
-                                <div class="widget-content">
-                                    <form method="post" class="form-horizontal">
-                                                
-
-                                            <div class="row">
-                                                <div class="col-xs-4">
-                                                    <label for="hashtag-input" id="hashtag-label" class="control-label">Hash Tag  #</label>
-                                                </div>
-                                                <div class="col-xs-6">
-                                                    <input type="text" placeholder="Honolulu" class="form-control" id="hashtag-input">
-                                                </div>
-                                                <div class="col-xs-2">
-                                                    <button class="btn btn-warning" type="button"><i class="fa fa-plus"></i></button>
-                                                </div>
-                                            </div>
-                                            <br />
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <div class="widget-content">  
-                                                        <table class="table table-bordered">
-                                                            {Hashtags}
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <label for="hint-field" class="control-label"> Cantidad de Imágenes a mostrar</label>
-                                            
-                                                <input type="text" class="form-control" id="hint-field">
-                                           
-
-                                        
-                                        <div class="form-actions">
-                                            <div>
-                                                <button class="btn btn-primary" type="submit">Guardar cambios</button>
-                                                <button class="btn btn-default" type="button">Cancelar</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- AGREGAR, BORRAR O EDITAR HASHTAGS -->
                         <div class="col-lg-6">
                             <div class="widget">
                                 <div class="widget-header">
-                                    <i class="icon-align-right"></i>
-                                    <h3> Configuracion de censuras </h3>
+                                    <h3>Configuracion de Instagram y Twitter</h3>
                                 </div>
+                                
                                 <div class="widget-content">
-                                    <form method="post">
-                                        <fieldset>
-                                            <div class="form-group">
-                                                <label for="bar">Censurar palabra</label>
+                                    <!-- FORM PAR AGREGAR HASHTAGS -->
+                                    <form method="post" class="form-horizontal">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label for="hashtag-input" id="hashtag-label" class="control-label">Hash Tag  #</label>
+                                            </div>
+                                            <div class="col-md-9">
                                                 <div class="input-group">
-                                                    <input type="text" id="bar" class="form-control">
+                                                    <input type="text" placeholder="FeedTag" id="hashtag-input" class="form-control">
+
                                                     <div class="input-group-btn">
-                                                        <button class="btn btn-warning" type="button"><i class="fa fa-plus"></i></button>
-                                                        <button class="btn btn-success" type="button"><i class="fa fa-refresh"></i></button>
+                                                        <button class="btn btn-warning" id="hashtag-add" type="button"><i class="fa fa-plus"></i></button>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </fieldset>
-                                        <div class="form-actions ">
-                                            <div class="">
-                                                <button class="btn btn-inverse" type="submit">Guardar cambios</button>
-                                                <button class="btn btn-inverse" type="button">Cancelar</button>
+                                        </div>
+                                        <br />
+                                    </form>
+                                    <!-- ./ FORM PAR AGREGAR HASHTAGS -->
+
+                                    <!-- LISTADO DE HASHTAGS -->
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="widget-content">  
+                                                <table id="hashtag-list" class="table table-bordered">
+                                                    {Hashtags}
+                                                </table>
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
+                                    <!-- ./ LISTADO DE HASHTAGS -->
+
+                                    <label for="hint-field" class="control-label"> Cantidad de Imágenes a mostrar</label>
+                                    <input type="text" class="form-control" id="hint-field">
                                 </div>
+                                <!-- ./ FORM PAR AGREGAR HASHTAGS -->
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
+
+                        <!-- CONFIGURACIÓN DE CENSURAS -->
                         <div class="col-lg-6">
-                            <div class="widget widget-table action-table">
-                                <div class="widget-header"> 
-                                    <i class="icon-th-list"></i>
-                                    <h3>Censura agregadas</h3>
+                            <div class="row">
+                                <!-- AGREGAR PALABRA CENSURADA -->
+                                <div class="col-lg-12">
+                                    <div class="widget">
+                                        <div class="widget-header">
+                                            <h3>Configuracion de censuras </h3>
+                                        </div>
+
+                                        <div class="widget-content">
+                                            <form method="post" class="form-horizontal">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <label id="censured-label" class="control-label" for="word-input">Censurar palabra</label>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="input-group">
+                                                            <input type="text" id="word-input" class="form-control">
+                                                            <div class="input-group-btn">
+                                                                <button class="btn btn-warning" type="button"><i class="fa fa-plus"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="widget-content">              
-                                    <table class="table table-bordered">
-                                        <tr>
-                                            <td> Mierda </td>                   
-                                            <td class="td-actions">
-                                                <a class="btn btn-small btn-success" href="javascript:;">
-                                                    <i class="fa fa-edit"> </i>
-                                                </a>
-                                                <a class="btn btn-danger btn-small" href="javascript:;">
-                                                    <i class="fa fa-times"> </i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </table>              
+                                <!-- ./ AGREGAR PALABRA CENSURADA -->
+                                <!-- LISTADO DE PALABRAS CENSURADAS -->
+                                <div class="col-lg-12">
+                                    <div class="widget">
+                                        <div id="accordion" class="widget-header">
+                                            <h3>Palabras censuradas <i class="fa fa-caret-down fa-lg"></i></h3>
+                                        </div>  
+                                        <!-- PALABRAS CENSURADAS -->      
+                                        <div id="censured-words" class="row widget-content">
+                                            <div class="row col-md-12" id="black-list">
+                                                <div class="col-md-4">
+                                                    
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <table class="table table-bordered">
+                                                        {Blacklist}
+                                                    </table> 
+                                                </div>
+                                            </div>                                      
+                                        </div>
+                                        <!-- ./ PALABRAS CENSURADAS -->
+                                    </div>
                                 </div>
+                                <!-- ./ LISTADO DE PALABRAS CENSURADAS -->
                             </div>
                         </div>
                     </div>
+                    <!-- ./ ROW PRINCIPAL -->
                 </div> <!--/content container-->
+            </div> <!--/ page-content-->
+        </div>  <!--/content container-->
+
+        <!-- HASHTAG TEXBOX -->
+        <div id="hashtag-textbox">
+            <label>Modificar Hashtag</label>
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">#</span>
+                <input type="text" class="form-control" placeholder="Username">
             </div>
+
+            <div id="buttons-group">
+                <input type="button" class="hashtag-save btn btn-success btn-lg" value="Guardar" />
+                <input type="button" class="hashtag-cancel btn btn-danger btn-lg" value="Cancelar" />
+            </div>            
         </div>
+         <!-- /HASHTAG TEXBOX -->
+
+         <!-- HASHTAG DELETE TEXBOX -->
+        <div id="hashtag-del-textbox">
+            <label>¿Realmente quieres eliminar este hashtag?</label>
+            <input type="button" class="hashtag-delete-confirm btn btn-danger btn-block" value="Si, deseo eliminarlo" />
+            <input type="button" class="hashtag-cancel btn btn-success btn-block" value="No, no quiero eliminarlo" />         
+        </div>
+         <!-- /HASHTAG DELETE TEXBOX -->
 
         {FOOTER}
         <script type="text/javascript" lsrc="client/js/plugins/jquery-2.1.1.min.js"></script>
-
         <script type="text/javascript" lsrc="client/js/config/app.js"></script>
-        <script lsrc="client/js/plugins/bootstrap.min.js"></script> 
         <script type="text/javascript" lsrc="client/js/plugins/smooth-sliding-menu.js"></script>
 </body>
 </html>

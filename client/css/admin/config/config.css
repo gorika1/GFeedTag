@@ -1,0 +1,108 @@
+/*
+
+@HASHTAG TEXBOX
+
+*/
+div#hashtag-textbox, 
+div#hashtag-del-textbox {
+	display: none;
+	height: 100%;
+	text-align: center;
+	width: 100%;
+}
+
+div#hashtag-textbox label,
+div#hashtag-del-textbox label {
+	color: #000;
+	font-size: 20px;
+	margin-top: 30px;
+	text-align: center;
+}
+
+div#hashtag-textbox .input-group {
+	display: block;
+	margin: 60px auto 0;
+	text-align: center;
+}
+
+div#hashtag-textbox .input-group .input-group-addon {
+	background: #F08A4E;
+	border: #f0ad4e;
+	color: #FFF;
+	display: inline-block;
+	width: 10%;
+}
+
+div#hashtag-textbox .form-control {
+	background: #FFF;
+	border: 1px solid #9E684F;
+	color: #000;
+	display: inline-block;
+	margin-left: -4px;
+	width: 80%;
+}
+
+div#hashtag-textbox #buttons-group {
+	display: block;
+	margin: 25px 15px 0 0;
+	text-align: right;
+	width: 90%;
+}
+
+.blockUI.blockMsg.blockElement {
+	width: 100%;
+}
+
+/*
+
+@HASHTAG DEL TEXTBOX
+
+*/
+#hashtag-del-textbox .btn-block {
+	font-size: 20px;
+	height: 50px;
+	margin: 25px auto 0;
+	width: 80%;
+}
+
+
+
+a.hashtag-delete {
+	margin-left: 3px;
+}
+
+a.hashtag-delete.added {
+	margin-left: 7px;
+}
+
+/*
+
+@CENSURADOS TABLE
+
+*/
+#censured-words .col-lg-6 {
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+#censured-words .col-lg-6:first {
+	padding-right: 0;
+}
+
+#accordion:hover {
+	cursor: pointer;
+}
+
+#black-list {
+	max-height: 185px;
+}
+
+#black-list td {
+	padding: 3px 0 3px 15px;
+	vertical-align: middle;
+}
+
+#black-list td.td-actions {
+	width: 10px;
+	padding: 3px 3px;
+}

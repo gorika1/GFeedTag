@@ -7,21 +7,52 @@ class ConfigController extends ControllerAJAX
 {
 	public function __construct()
 	{
-		// Si no esta logueado
-		if( !isset( $_SESSION[ 'user'] ) )
+		// Si es para actualizar un hashtag
+		if( isset( $_POST[ 'update' ] ) && $_POST[ 'update' ] == 'Hashtag' )
 		{
-			header( 'Location: ../login' );
+			$myAdmin = new AdminModel();
+			$myAdmin->updateHashtag( $_POST );
 		}
+
+		// Si es para eliminar registros
+		else if( isset( $_POST[ 'delete' ] ) )
+		{
+			$myAdmin = new AdminModel();
+
+			// Si es para eliminar un hashtag
+			if( $_POST[ 'delete' ] == 'Hashtag' )
+				$myAdmin->deleteHashtag( $_POST[ 'idHashtag' ] );
+
+			// Si es para eliminar una palabra del blacklist
+			else if( $_POST[ 'delete'] == 'Word' )
+				$myAdmin->deleteWord( $_POST[ 'idWord' ] );
+
+		}
+
+		// Si es para agregar un hashtag
+		else if( isset( $_POST[ 'add' ] ) && $_POST[ 'add' ] == 'Hashtag' )
+		{
+			$myAdmin = new AdminModel();
+			$myAdmin->addHashtag( $_POST[ 'hashtag' ] );
+		}
+		
+		// Si es la llamada para la carga de la página
 		else
 		{
 			$drawing = new ConfigDrawing();
 
-			// Obtiene la cuenta de la cantidad de fotos en instagram y twitter
-			$myAdmin = new AdminModel();
-
-			$drawing->drawPage( 'Configurar | FeedTag', array( 'Hashtags()' ) );
+			$drawing->drawPage( 'Configurar | FeedTag', array( 'Hashtags()', 'Blacklist()' ) );
 		} // end if..else
 	} // end __construct
 } // end ConfigController
 
-$page = new ConfigController();
+
+// Si no esta logueado
+if( !isset( $_SESSION[ 'user'] ) )
+{
+	header( 'Location: ../login' );
+}
+else
+{
+	$page = new ConfigController();
+}
