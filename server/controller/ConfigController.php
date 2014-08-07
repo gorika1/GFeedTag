@@ -29,11 +29,18 @@ class ConfigController extends ControllerAJAX
 
 		}
 
-		// Si es para agregar un hashtag
-		else if( isset( $_POST[ 'add' ] ) && $_POST[ 'add' ] == 'Hashtag' )
+		// Si es para agregar registros
+		else if( isset( $_POST[ 'add' ] ) )
 		{
 			$myAdmin = new AdminModel();
-			$myAdmin->addHashtag( $_POST[ 'hashtag' ] );
+
+			// Si es para agregar un hashtag
+			if( $_POST[ 'add' ] == "Hashtag" )
+				$myAdmin->addHashtag( $_POST[ 'hashtag' ] );
+
+			// Si es para agregar una palabra al blacklist
+			else if( $_POST[ 'add' ] == "word" )
+				$myAdmin->addWord( $_POST[ 'word' ] );
 		}
 		
 		// Si es la llamada para la carga de la página

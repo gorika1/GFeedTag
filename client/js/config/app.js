@@ -9,6 +9,7 @@ $(document).on( 'ready', function(){
 	// Acordeon de Palabras censuradas
 	iniciarAcordeon();
 
+	// Blacklist Scrolling
 	$("#black-list").mCustomScrollbar({
 		theme:"3d-thick",
 		scrollButtons:{
@@ -29,13 +30,10 @@ $(document).on( 'ready', function(){
 			// Agrega el hashtag en la base de datos y en el DOM
 			addHashtagInDB( hashtag );
 		}
-		else
-		{
-			// Reestablece el valor del input y hace focus en el
-			$('#hashtag-input').val('');
-			$('#hashtag-input').focus();
-		}
-		
+
+		// Reestablece el valor del input y hace focus en el
+		$('#hashtag-input').val('');
+		$('#hashtag-input').focus();
 	});
 
 	// Si se presiona el boton para editar un hashtag
@@ -46,6 +44,22 @@ $(document).on( 'ready', function(){
 	// Si se hace click para eliminar un hashtag
     $('#hashtag-list').on( 'click', '.hashtag-delete', function() {
 	    deleteHashtag( this );
+    });
+
+    // Agrega un item al blacklist
+    $('#word-add').on( 'click', function(){
+    	var word = $('#word-input').val().trim();
+
+		// Si hay un hashtag para agregar a la base de datos
+		if ( word.length > 0 )
+		{
+			// Agrega el hashtag en la base de datos y en el DOM
+			addWordInDB( word.toLowerCase() );
+		}
+
+		// Reestablece el valor del input y hace focus en el
+		$('#word-input').val('');
+		$('#word-input').focus();
     });
 
     // Si se hace click para agregar un palabra censurada
@@ -106,8 +120,6 @@ function addHashtag( idHashtag, hashtag ){
 							    '</td>' +
 							'</tr>'
 							);
-	$('#hashtag-input').val('');
-	$('#hashtag-input').focus();
 }
 
 function editHashtag( thisObj ){
@@ -247,7 +259,43 @@ function iniciarAcordeon() {
 	});
 } // end iniciarAcordeon
 
+// Agrega una palabra al blacklist en el DOM
+function addWord( idWord, word ){
+	// Valor inicial de la posicion del elemento que deberia estar antes
+	var pos = 0;
 
+	$('.word-item').each( function( index, value ){
+		if( word > $(this).text())
+			pos = $(this).attr('id-word');	
+	});
+
+	// Si la palabra agregada es menor a todos los anteriores
+	if( pos == 0 )
+		$('#censured-words table').prepend( '<tr>' +
+		    						'<td class="word-item" id-word="' + idWord+ '">' + word + '</td>' +                
+		    						'<td class="td-actions">' +
+		        						'<a class="btn btn-danger btn-small word-delete">' +
+								            '<i class="fa fa-times"> </i>' +
+								        '</a>' +
+								    '</td>' +
+								'</tr>'
+								);
+	else
+	{
+		var element = $( '.word-item[id-word="' + pos + '"]' ).parent();
+		$( '<tr>' +
+				'<td class="word-item" id-word="' + idWord+ '">' + word + '</td>' +                
+				'<td class="td-actions">' +
+					'<a class="btn btn-danger btn-small word-delete">' +
+			            '<i class="fa fa-times"> </i>' +
+			        '</a>' +
+			    '</td>' +
+			'</tr>').insertAfter( element );
+	}
+
+}
+
+// Elimina la palabra del blacklist en el DOM
 function deleteWord( thisObj ) {
 	var id = $(thisObj).parent().prev().attr('id-word');
 	$(thisObj).parent().parent().remove();
@@ -257,6 +305,29 @@ function deleteWord( thisObj ) {
 /*
 	FUNCIONES QUE MODIFICAN HASHTAGS EN LA BASE DE DATOS
 */
+
+// Agrega la palabra al blacklist en la base de datos
+// Recibe el id asignado a dicho registro y lo agrega en el DOM
+function addWordInDB( word ) {
+
+ 	$.ajax({
+		url: '',
+		data: {'add':'word', 'word':word},
+		dataType: 'text',
+		contentType: 'application/x-www-form-urlencoded',
+		error: function() {
+			alert( 'Ha ocurrido un error' );
+		},
+		success: function(data) {
+			if( data !== 'false' )
+				// Agrega el hashtag al DOM en el listado
+				addWord( data, word );
+		},
+		type: 'POST',
+		timeout: 10000,
+	});
+}
+
 function deleteWordInDB( idWord ) {
  	$.ajax({
 		url: '',

@@ -59,6 +59,27 @@ class AdminModel
 		return $blacklist;
 	} // end getHashtags
 
+	// Agrega una palabra al blacklist
+	public function addWord( $word )
+	{
+		//Controla si no existe un registro similar para luego insertar
+		$reg = GMySQLi::getRegisters( 'Blacklist', array( 'idPalabra' ), "palabra = '" . $word . "'" );
+
+		if( sizeof( $reg ) == 0 )
+		{
+			GMySQLi::setRegister( 'Blacklist', '*', array( null, strtolower( $word ), $_SESSION[ 'idUser' ] ) );
+
+			// Devuelve el id de la palabra agregada
+			$lastId = GMySQLi::getRegisters( 'Blacklist', array( 'idPalabra' ), 
+								'Users_idUser = ' . $_SESSION[ 'idUser' ],
+								'idPalabra DESC', 1 );
+
+			echo $lastId[0]['idPalabra'];
+		}
+		else
+			echo 'false';
+	} // end addHashtag
+
 	// Elimina una palabra del blacklist
 	public function deleteWord( $idWord )
 	{
