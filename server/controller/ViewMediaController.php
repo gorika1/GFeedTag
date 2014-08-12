@@ -11,12 +11,14 @@ class ViewMediaController extends ControllerAJAX {
 	private $twitter;
 	private $myMedia;
 	private $lastTime; // guarda el time del ultimo media obtenido desde la base de datos
+	private $tags; // tags configurados en la base de datos
 
 	public function __construct()
 	{
 		header("Access-Control-Allow-Origin: *");
 		$this->drawing = new ViewMediaDrawing();
 		$this->myMedia = new MediaModel();
+		$this->tags = $this->myMedia->getTags();
 		$this->callFunctions();
 	} // end __construct
 
@@ -26,12 +28,38 @@ class ViewMediaController extends ControllerAJAX {
 
 	private function callFunctions()
 	{
-		if( isset( $_POST[ 'ajax' ] ) && isset( $_POST[ 'get' ] ) && $_POST[ 'get' ] == 'Photos'  )
+		if( isset( $_POST[ 'get' ] )  )
 		{
-			$this->getTwitterMedia();
-			$this->getInstagramMedia();
-			$this->callDraw( $this->drawing, 'Photos', 
-							array( $_POST[ 'lastTime' ], $_POST[ 'lastPos' ], true ) );
+			// Si es para obtener las imagenes
+			if( $_POST[ 'get' ] == 'Photos' )
+			{
+				$this->getTwitterMedia();
+				$this->getInstagramMedia();
+				$this->callDraw( $this->drawing, 'Photos', 
+								array( $_POST[ 'lastTime' ], $_POST[ 'lastPos' ], true ) );
+			}
+			// Si es para obtener el registro de las imagenes borradas en el admin
+			else if ( $_POST [ 'get' ] == 'PhotosDeleted' )
+			{
+				// Comprueba que exista el registro
+				// de imagenes eliminadas y lo retorna 
+				if( is_file( 'server/deleted.dat' ) )
+				{
+					$file = fopen( 'server/deleted.dat', 'r' );
+					$data = array();
+
+					while ( !feof( $file ) )  
+					{
+						$data[] = str_replace( "\n", '', fgets( $file ) );
+					}
+
+					fclose( $file );
+					unlink( 'server/deleted.dat' );
+					echo json_encode( $data );
+				} // end if
+				
+			} // end if
+			
 		}
 		else
 		{
@@ -71,19 +99,17 @@ class ViewMediaController extends ControllerAJAX {
 	//Genera el string correcto para realizar la peticion multitag
 	private function getTwitterTagQuery()
 	{
-		$tags = $this->myMedia->getTags();
-
 		$query = '';
 
-		$size = sizeof( $tags );
+		$size = sizeof( $this->tags );
 
 		for( $i = 0; $i < $size; $i++ )
 		{
 			// Si no es el ultimo hashtag a agregar al query
 			if( $i < $size - 1 )
-				$query .= '#' . $tags[ $i ][ 'hashtag' ] . '+OR+';
+				$query .= '#' . $this->tags[ $i ][ 'hashtag' ] . '+OR+';
 			else
-				$query .= '#' . $tags[ $i ][ 'hashtag' ];
+				$query .= '#' . $this->tags[ $i ][ 'hashtag' ];
 		} // end for
 
 		return $query;
@@ -93,14 +119,12 @@ class ViewMediaController extends ControllerAJAX {
 	// debido a que Instagram no permite realizar peticiones multitag
 	private function getInstagramMedia()
 	{
-		$tags = $this->myMedia->getTags();
-
-		$size = sizeof( $tags );
+		$size = sizeof( $this->tags );
 
 		for( $i = 0; $i < $size; $i++ )
 		{
 			// Tag a Buscar
-			$tag = $tags[ $i ][ 'hashtag' ];
+			$tag = $this->tags[ $i ][ 'hashtag' ];
 			$url = sprintf( 'https://api.instagram.com/v1/tags/%s/media/recent?access_token=%s&count=100&min_tag_id=%s',
 						$tag, 
 						$this->myMedia->getInstagramToken(),

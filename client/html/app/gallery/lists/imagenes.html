@@ -1,9 +1,19 @@
- <div class="col-sm-4 col-md-2">
-     <a class="example-image-link" href="img/gallery-photo/image-1.jpg" data-lightbox="example-set" title="Click on the right side of the image to move forward."> 
-              <div class="image-row">
-        <div class="image-set">
-             <img class="example-image" src="img/gallery-photo/thumb-1.jpg" alt="Plants: image 1 0f 4 thumb" width="150" height="150"/>
-            </a>
-        </div>
-    </div>
-</div>
+<tr>
+    <td class="media-photo">
+        <img src="{ImageURL}" />
+    </td>
+    <td>
+        {Texto}
+    </td>
+    <td class="media-user">
+        @{User}
+    </td>
+    <td class="media-font">
+        <img lsrc="client/images/{Fuente}_icon.png" />
+    </td>
+    <td>
+        <a class="btn btn-danger btn-lg media-delete" id-media="{IdMedia}" from="{MediaFrom}">
+            <i class="fa fa-times"> </i>
+        </a>
+    </td>
+</tr>

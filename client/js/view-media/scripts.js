@@ -25,6 +25,7 @@ $(document).on( 'ready', function(){
     });
 
     setInterval( getMedia, 120000 );
+    setInterval( getMediaDeleted, 30000 );
 });
  
 function adaptar()

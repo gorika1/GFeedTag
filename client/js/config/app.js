@@ -120,7 +120,7 @@ function addHashtag( idHashtag, hashtag ){
 							    '</td>' +
 							'</tr>'
 							);
-}
+} // end addHashtag
 
 function editHashtag( thisObj ){
 	$('body').block({ 
@@ -199,9 +199,9 @@ function addHashtagInDB( hashtag ) {
 		type: 'POST',
 		timeout: 10000,
 	});
-}
+} // end addHashtagInDB
 
- function updateHashtagInDB( hashtag ) {
+function updateHashtagInDB( hashtag ) {
  	$.ajax({
 		url: '',
 		data: {'update':'Hashtag', 'idHashtag':idHashtag, 'hashtag':hashtag},
@@ -212,7 +212,7 @@ function addHashtagInDB( hashtag ) {
 		type: 'POST',
 		timeout: 10000,
 	});
-}
+} // end updateHashtagInDB
 
 function deleteHashtagInDB() {
  	$.ajax({
@@ -226,7 +226,7 @@ function deleteHashtagInDB() {
 		type: 'POST',
 		timeout: 10000,
 	});
-}
+} // end deleteHashtagInDB
 
 
 /*
@@ -291,16 +291,17 @@ function addWord( idWord, word ){
 			        '</a>' +
 			    '</td>' +
 			'</tr>').insertAfter( element );
-	}
+	} // end if...else
 
-}
+} // end addWord
+
 
 // Elimina la palabra del blacklist en el DOM
 function deleteWord( thisObj ) {
 	var id = $(thisObj).parent().prev().attr('id-word');
 	$(thisObj).parent().parent().remove();
 	deleteWordInDB( id );
-}
+} // end deleteWord
 
 /*
 	FUNCIONES QUE MODIFICAN HASHTAGS EN LA BASE DE DATOS
@@ -326,7 +327,7 @@ function addWordInDB( word ) {
 		type: 'POST',
 		timeout: 10000,
 	});
-}
+} // end addWordInDB
 
 function deleteWordInDB( idWord ) {
  	$.ajax({
@@ -340,4 +341,4 @@ function deleteWordInDB( idWord ) {
 		type: 'POST',
 		timeout: 10000,
 	});
-}
+} // end deleteWordInDB

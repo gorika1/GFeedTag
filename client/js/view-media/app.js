@@ -1,5 +1,4 @@
 var oMedia = {}; // guarda las imagenes
-var lastPos; // almacena la ultima posicion de las imagenes cargadas
 
 // Guarda los datos en un json
 // en la primera carga del sistema
@@ -16,7 +15,7 @@ function getMediaFirstTime()
 			{ 	
 				// inserta los atributos last-time y last-pos
 				$( '#last-time' ).attr( 'time', data.lastTime );
-				$( '#last-time' ).attr( 'last-pos', lastPos = data.lastPos );
+				$( '#last-time' ).attr( 'last-pos', data.lastPos );
 
 				oMedia = data.media;
 
@@ -40,9 +39,10 @@ function getMedia( options )
 {
 	//get the time of the last media uploaded
 	time = $( '#last-time' ).attr( 'time' );
+	lastPos = $( '#last-time' ).attr( 'last-pos' );
 
 	$.ajax({
-		data: {'ajax':'true','get':'Photos', 'lastTime':time, 'lastPos':lastPos  },
+		data: {'get':'Photos', 'lastTime':time, 'lastPos':lastPos  },
 		contentType: 'application/x-www-form-urlencoded',
 		dataType: 'json',
 		ifModified: false,
@@ -67,6 +67,39 @@ function getMedia( options )
 	});	
 } // end getMedia
 
+// Obtiene las url de las imagenes borradas en el admin
+// para poder quitarlas del DOM
+function getMediaDeleted( options ) 
+{
+	$.ajax({
+		data: {'get':'PhotosDeleted' },
+		contentType: 'application/x-www-form-urlencoded',
+		dataType: 'json',
+		ifModified: false,
+		processData: true,
+		success: function( data ) {
+			if( data )
+			{
+				// Por cada url devuelta
+				for( i in data )
+				{
+					lastTimeElem = $('#last-time' );
+					element = $('#carousel img[src="' + data[ i ] + '"]' );
+					// Elimina la imagen en el DOM
+					lastPos = lastTimeElem.attr( 'last-pos' );
+
+					if( lastPos == element.attr( 'pos' ) )
+						lastTimeElem.attr( 'last-pos', lastPos - 1 );
+
+					element.remove();
+				} // end for
+							
+			} // end if
+		},
+		type: 'POST',
+		timeout: 45000
+	});	
+} // end getMediaDeleted
 
 function drawPhotos( firstTime, data )
 {

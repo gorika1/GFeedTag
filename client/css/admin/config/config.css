@@ -77,6 +77,20 @@ a.hashtag-delete.added {
 
 /*
 
+@HASHTAGS TABLE
+
+*/
+
+.td-actions {
+	width: 105px;
+}
+
+.table>tbody>tr>td {
+	vertical-align: middle;
+}
+
+/*
+
 @CENSURADOS TABLE
 
 */
@@ -94,7 +108,7 @@ a.hashtag-delete.added {
 }
 
 #black-list {
-	max-height: 185px;
+	max-height: 300px;
 }
 
 #black-list td {

@@ -18,7 +18,7 @@ class MediaModel
 		$photos = GMySqli::getRegisters( 'Media', 
 												array( 'url', 'text', 'screen_name', '_from' ), 
 												'Users_idUser = ' . $_SESSION[ 'idUser' ] . ' AND time > ' . $prevTime,
-												'time' );
+												'time DESC'  );
 		return $photos;
 	} // end getTwitterMedia
 
@@ -134,8 +134,12 @@ class MediaModel
 			$url = $photos[ 'data' ][ $i ][ 'images' ][ 'standard_resolution' ][ 'url' ];
 
 			$text = $photos[ 'data' ][ $i ][ 'caption' ][ 'text' ];
+			// Limita el texto a 100 caractares
 			if( strlen( $text ) > 100 )
 				$text = substr( $text, 0, 96 ) . '...';
+
+			// Escapa las comillas para poder insertar en la base de datos
+			$text = str_replace( "'", "\'", $text );
 
 			$time = $photos[ 'data' ][ $i ][ 'caption' ][ 'created_time' ];
 			$screen_name = $photos[ 'data' ][ $i ][ 'user' ][ 'username' ];
@@ -143,6 +147,8 @@ class MediaModel
 			// Pasa 2 para indicar que el dato viene desde instagram
 			GMySqli::setRegister( 'Media', '*', array( 
 									$idMedia, $_SESSION[ 'idUser' ], $url, $text, $time, $screen_name, 2  ) );
+
+			 
 		} // end for
 	} // end saveInstaPhotos
 
@@ -172,5 +178,24 @@ class MediaModel
 			} // end if
 		} // end if
 	} // end setNextInstaId
+
+
+
+	/*
+		FOR THE GALLERY IN THE ADMIN
+	*/
+	public function getGallery()
+	{
+		$media = GMySqli::getRegisters( 'Media', array( 'idMedia', 'url', 'text', 'screen_name', '_from' ),
+											'Users_idUser = ' . $_SESSION[ 'idUser' ],
+											'time DESC' );
+
+		return $media;
+	} // end getGallery
+
+	public function deleteMedia( $idMedia, $from )
+	{
+		GMySqli::deleteRegister( 'Media', 'idMedia =' . $idMedia . ' AND _from =' . $from );
+	} // end deleteMedia
 
 } // end MediaModel
