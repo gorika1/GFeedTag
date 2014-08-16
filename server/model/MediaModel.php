@@ -16,7 +16,7 @@ class MediaModel
 	public function getMedia( $prevTime )
 	{
 		$photos = GMySqli::getRegisters( 'Media', 
-												array( 'url', 'text', 'screen_name', '_from' ), 
+												array( 'idMedia', 'url', 'text', 'screen_name', '_from' ), 
 												'Users_idUser = ' . $_SESSION[ 'idUser' ] . ' AND time > ' . $prevTime,
 												'time DESC'  );
 		return $photos;

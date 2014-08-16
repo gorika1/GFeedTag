@@ -1,12 +1,16 @@
 <tr>
     <td class="media-photo">
-        <img src="{ImageURL}" />
+        <a class="example-image-link" href="{ImageURL}" data-lightbox="example-set" title="{Texto}"> 
+            <img src="{ImageURL}" />
+        </a>
     </td>
     <td>
         {Texto}
     </td>
     <td class="media-user">
-        @{User}
+        <a target="_blank" href="{Link}{User}">
+            <span class="user-name">@{User}</span>
+        </a>
     </td>
     <td class="media-font">
         <img lsrc="client/images/{Fuente}_icon.png" />

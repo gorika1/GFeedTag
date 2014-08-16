@@ -12,6 +12,29 @@ class AdminModel
 		return $counts;
 	} // end getRecount
 
+
+	// Obtiene la fecha inicial de las publicaciones
+	public function getInitialDate()
+	{
+		$register = GMySQLi::getRegister( 'Users', array( 'initialDate' ), 'idUser = ' . $_SESSION[ 'idUser' ] );
+
+		if( $register[ 'initialDate' ] == 0 )
+			return 'Traer desde todos los tiempos';
+
+		return date( "d-m-Y", $register[ 'initialDate' ]);
+	} // end getInitialDate
+
+	// Actualiza la fecha inicial para traer las imagenes
+	public function setInitialDate( $date )
+	{
+		if( $date == false )
+			$date = null;
+		else
+			$date = strtotime( $date );
+
+		GMySQLi::updateRegister( 'Users', array( 'initialDate' => $date ), 'idUser =' . $_SESSION[ 'idUser' ] );
+	}
+
 	// Obtiene el listado de hashtags
 	public function getHashtags()
 	{

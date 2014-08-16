@@ -7,18 +7,23 @@ class ConfigController extends ControllerAJAX
 {
 	public function __construct()
 	{
-		// Si es para actualizar un hashtag
-		if( isset( $_POST[ 'update' ] ) && $_POST[ 'update' ] == 'Hashtag' )
+		$myAdmin = new AdminModel();
+
+		// Si es para actualizar un dato
+		if( isset( $_POST[ 'update' ] ) )
 		{
-			$myAdmin = new AdminModel();
-			$myAdmin->updateHashtag( $_POST );
+			// Si es para actualizar un hashtag	
+			if( $_POST[ 'update' ] == 'Hashtag' )
+				$myAdmin->updateHashtag( $_POST );
+
+			// Si es para actualizar la fecha inicial
+			else if ( $_POST[ 'update' ] == 'initialDate' )
+				$myAdmin->setInitialDate( $_POST[ 'date' ] );
 		}
 
 		// Si es para eliminar registros
 		else if( isset( $_POST[ 'delete' ] ) )
 		{
-			$myAdmin = new AdminModel();
-
 			// Si es para eliminar un hashtag
 			if( $_POST[ 'delete' ] == 'Hashtag' )
 				$myAdmin->deleteHashtag( $_POST[ 'idHashtag' ] );
@@ -32,8 +37,6 @@ class ConfigController extends ControllerAJAX
 		// Si es para agregar registros
 		else if( isset( $_POST[ 'add' ] ) )
 		{
-			$myAdmin = new AdminModel();
-
 			// Si es para agregar un hashtag
 			if( $_POST[ 'add' ] == "Hashtag" )
 				$myAdmin->addHashtag( $_POST[ 'hashtag' ] );
@@ -48,7 +51,11 @@ class ConfigController extends ControllerAJAX
 		{
 			$drawing = new ConfigDrawing();
 
-			$drawing->drawPage( 'Configurar | FeedTag', array( 'Hashtags()', 'Blacklist()' ) );
+			$initialDate = $myAdmin->getInitialDate();
+
+			$drawing->drawPage( 'Configurar | FeedTag', 
+								array( 'Hashtags()', 'Blacklist()' ),
+								array( 'FechaInicial' => $initialDate ) );
 		} // end if..else
 	} // end __construct
 } // end ConfigController

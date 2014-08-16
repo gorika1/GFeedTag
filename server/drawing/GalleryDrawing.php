@@ -21,6 +21,7 @@ class GalleryDrawing extends Drawing
 		{
 		 	$this->list[] = array(
 		 			'IdMedia' => $media[ 'idMedia' ],
+		 			'Link' => $this->getLink( $media[ '_from' ] ),
 		 			'MediaFrom' => $media[ '_from' ],
 		 			'ImageURL' => $media[ 'url' ],
 		 			'Texto' => $media[ 'text' ],
@@ -33,7 +34,17 @@ class GalleryDrawing extends Drawing
 		$this->draw( 'ListaMedia' );
 	} // end drawMedia
 
+	private function getLink( $from )
+	{
+		if( $from == 1 )
+		{
+			return 'https://twitter.com/';
+		}
+		else
+			return 'https://instagram.com/';
+	} // end getLink
 
+	// Obtiene la red social de donde se extrajo la foto
 	private function getFont( $identifier )
 	{
 		if( $identifier == 1 )

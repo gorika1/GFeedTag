@@ -120,3 +120,14 @@ a.hashtag-delete.added {
 	width: 10px;
 	padding: 3px 3px;
 }
+
+
+
+.form-control[disabled] {
+	cursor: pointer;
+	color: #212121;
+}
+
+.checkbox {
+	margin-top: 15px;
+}

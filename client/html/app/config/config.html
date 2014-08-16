@@ -6,11 +6,15 @@
         <link lhref="client/css/font-awesome.min.css" rel="stylesheet" media="screen">
         <link lhref="client/css/admin/style.css" rel="stylesheet">
         <link lhref="client/css/admin/dashboard.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" lhref="client/css/admin/config/config.css" />
-        <link rel="stylesheet" type="text/css" lhref="client/css/admin/config/jquery.mCustomScrollbar.css" />
+        <link lhref="client/css/admin/config/config.css" rel="stylesheet"  />
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
+        <link lhref="client/css/admin/config/jquery.mCustomScrollbar.css" rel="stylesheet" />
+
         <script type="text/javascript" lsrc="client/js/plugins/jquery-2.1.1.min.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
         <script type="text/javascript" lsrc="client/js/plugins/jquery.blockUI.js"></script>
-        <script type="text/javascript" lsrc="client/js/plugins/jquery.mCustomScrollbar.concat.min.js"></script>        
+        <script type="text/javascript" lsrc="client/js/plugins/jquery.mCustomScrollbar.concat.min.js"></script>
+        <script type="text/javascript" lsrc="client/js/functions.js"></script>
         <script type="text/javascript" lsrc="client/js/config/app.js"></script>
 
 
@@ -37,7 +41,7 @@
                     <!-- ./ TITULO SUPERIOR -->
                     <!-- ROW PRINCIPAL -->
                     <div class="row">
-                        <!-- AGREGAR, BORRAR O EDITAR HASHTAGS -->
+                        <!-- AGREGAR, BORRAR O EDITAR HASHTAGS Y FECHAS -->
                         <div class="col-lg-6">
                             <div class="widget">
                                 <div class="widget-header">
@@ -76,13 +80,31 @@
                                         </div>
                                     </div>
                                     <!-- ./ LISTADO DE HASHTAGS -->
-
-                                    <label for="hint-field" class="control-label"> Cantidad de Imágenes a mostrar</label>
-                                    <input type="text" class="form-control" id="hint-field">
+                                    <br />
+                                    <!-- CONFIGURACION DE FECHAS -->
+                                    <div class="row">
+                                        <div class="col-lg-5 col-md-5">
+                                            <label class="control-label">Traer imágenes desde la fecha:</label>
+                                        </div>
+                                        <div class="col-lg-7 col-md-7 col-sm-6 col-xs-8">
+                                            <div id="date-container">
+                                                <input type="text" value="{FechaInicial}" id="date-input" class="form-control" disabled>
+                                            </div>
+                                            
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" value="">
+                                                    Traer desde todos los tiempo
+                                                </label>
+                                            </div>
+                                            <div id="datepicker"></div>
+                                        </div>                                    
+                                    </div>
+                                    <!-- ./ CONFIGURACION DE FECHAS -->
                                 </div>
-                                <!-- ./ FORM PAR AGREGAR HASHTAGS -->
                             </div>
                         </div>
+                        <!-- AGREGAR, BORRAR O EDITAR HASHTAGS Y FECHAS -->
 
                         <!-- CONFIGURACIÓN DE CENSURAS -->
                         <div class="col-lg-6">

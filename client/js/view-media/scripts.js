@@ -24,10 +24,10 @@ $(document).on( 'ready', function(){
         adaptar();
     });
 
-    setInterval( getMedia, 120000 );
-    setInterval( getMediaDeleted, 30000 );
+    $("img").error(function () {
+    });
 });
- 
+
 function adaptar()
 {
     size = $(window).height() - 170;    

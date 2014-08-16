@@ -6,6 +6,9 @@ $(document).on( 'ready', function(){
 
 	$( '.left-nav #config' ).addClass( 'current' );
 
+	// Datepicker para elegir la fecha de las publicaciones
+	datePicker();
+
 	// Acordeon de Palabras censuradas
 	iniciarAcordeon();
 
@@ -342,3 +345,84 @@ function deleteWordInDB( idWord ) {
 		timeout: 10000,
 	});
 } // end deleteWordInDB
+
+
+function saveDateInDB( date ) {
+	$.ajax({
+		url: '',
+		data: { 'update':'initialDate', 'date': date },
+		dataType: 'text',
+		contentType: 'application/x-www-form-urlencoded',
+		error: function() {
+			alert( 'Ha ocurrido un error' );
+		},
+		type: 'POST',
+		timeout: 10000,
+	});
+}
+
+
+function datePicker() {
+	$.datepicker.setDefaults($.datepicker.regional["es"]);
+	$("#datepicker").datepicker({
+		dateFormat: 'dd-mm-yy',
+		firstDay: 1,
+		maxDate: 0,
+		onSelect: function (date) {
+			$('#date-input').val( date ); // Actualiza el input
+			$('#datepicker').slideToggle(); // Oculta el calendario
+			saveDateInDB( date ); // Guarda en la base de datos
+			$('.checkbox input').prop( 'checked', false ); // deschequea el checkbox
+		}
+	}); 
+
+	width = $('#date-input').width();
+	$('.ui-datepicker-inline').css({
+		'width': width + 12,
+	});
+
+	$(window).resize(function(){
+		width = $('#date-input').width();
+		$('.ui-datepicker-inline').css({
+			'width': width + 12,
+		});
+	});
+
+	// Si no hay una fecha X determinada para el inicio de las publicaciones
+	// checkea el checkbox
+	if( $('#date-input' ).val() == 'Traer desde todos los tiempos' )
+		$('.checkbox input').prop( 'checked', true );
+
+	// Oculta el div que contiene el calendario
+	$('#datepicker').hide();
+	var sw = false;
+
+	if( $('#datepicker').css('display') != 'none' )
+		sw = true;
+
+	// Si se hace click en el titulo (el div)
+	$('#date-container').on('click', function() {
+		$div = $("#datepicker"); // Guarda el div que contiene la lista
+
+	 	// Si la lista estaba oculta
+	    if ( ! sw ) {
+	    	// Despliega la lista
+	        $div.slideToggle();
+	        sw = true;	        
+	    } else {
+	       $div.slideToggle();
+	       sw = false;
+	    }
+	});
+
+	// Evento del checkbox
+	$('.checkbox input').on( 'click', function(){
+		if( $(this).prop( 'checked' ) == true )
+		{
+			$('#date-input' ).val( 'Traer desde todos los tiempos' );
+			saveDateInDB( false ); // Guarda en la base de datos
+		}
+		else
+			$('.checkbox input').prop( 'checked', true );
+	} )
+}

@@ -122,3 +122,12 @@ div#media-del-textbox label {
 	margin: 25px auto 0;
 	width: 80%;
 }
+
+.media-user a {
+	text-decoration: none;
+}
+
+.user-name {
+	color: #00a2db;
+	font-size: 16px;
+}
