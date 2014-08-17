@@ -17,6 +17,4 @@ if ( isset( $config[ 'Data Base' ] ) )
 	Gear\Db\Connecting::setConnectData( $dataBase );
 } // end if
 
-$folder; // almacena la carpeta correspondiente de client/html/app/
-
 $urlController = $drawer->getMVC( 'action', 'login', 'error' );//obtiene el controller de acuerdo al valor de la posicion action en $_GET[]

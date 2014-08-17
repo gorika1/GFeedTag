@@ -43,9 +43,11 @@ class Drawer extends Template {
 		}//end if
 
 		
-
 		$this->headTemplate = file_get_contents( $uri . $masterPage[ 'HEAD' ] . '.html' );
-		$this->headerTemplate = file_get_contents( $uri . $masterPage[ 'HEADER' ] . '.html' );
+
+		if( isset( $this->headerTemplate ) )
+			$this->headerTemplate = file_get_contents( $uri . $masterPage[ 'HEADER' ] . '.html' );
+
 		$this->footerTemplate = file_get_contents( $uri . $masterPage[ 'FOOTER' ] . '.html' );
 
 	}//end __construct
@@ -56,10 +58,17 @@ class Drawer extends Template {
 
 	//Dibuja las partes principales de las paginas
 	private function principalDraw() {
+
 		$this->drawing[ 'HEAD' ] = $this->getHead();
-		$this->drawing[ 'HEADER' ] = $this->getHeader();
+
+		if( $this->getHeader() != '' )
+			$this->drawing[ 'HEADER' ] = $this->getHeader();
+
 		$this->drawing[ 'FOOTER' ] = $this->getFooter();
 		$this->drawing[ '[Lx]' ] = '';
+
+		// Obtiene todos los que necesitan un controlador
+		$this->drawConstWithController();
 
 	}//end principalTranslate
 
@@ -97,9 +106,9 @@ class Drawer extends Template {
 	//Traduce un template de listado
 	private function drawList( &$array, &$template ) {
 
-		foreach( $array as $key => $valor ) {
-			$template = str_replace( '{'.$key.'}', $valor, $template );
-			
+		foreach( $array as $key => $valor ) 
+		{
+			$template = str_replace( '{'.$key.'}', $valor, $template );			
 		}//end foreach
 
 		//Devuelve un template traducido
@@ -115,7 +124,8 @@ class Drawer extends Template {
 	public function draw( &$array = array(), &$template = null ) {
 		
 		//Si se establecio un template, quiere decir que se traduce una lista
-		if( isset( $template ) ) {
+		if( isset( $template ) ) 
+		{
 			$template = $this->drawList( $array, $template );
 			return $template;
 		}//end if
@@ -124,10 +134,10 @@ class Drawer extends Template {
 		$this->principalDraw();
 
 		//Crea el diccionario especifico de la pagina
-		$this->createDrawing( $array );			
+		$this->createDrawing( $array );
 
-		foreach( $this->drawing as $key => $valor ) {
-
+		foreach( $this->drawing as $key => $valor ) 
+		{
 			//Obtiene el template mediante el metodo getPage de la clase Index y lo traduce. Y utiliza el metodo setPage de la clase Index para establecer la pagina.
 			$this->setPage( str_replace( '{'.$key.'}', $valor, $this->getPage() ) );
 
@@ -161,9 +171,11 @@ class Drawer extends Template {
 
 
 	//Definir un template constante del sitio
-	public function setDrawConst( $template, $key ) {
-
-		if( !array_key_exists( $key, $this->drawing ) ) {
+	public function setDrawConst( &$template, $key ) 
+	{
+		
+		if( !array_key_exists( $key, $this->drawing ) ) 
+		{
 			$this->drawing[ $key ] = $template;
 			
 		}//end if
@@ -182,6 +194,7 @@ class Drawer extends Template {
 		for( $i = 0; $i < sizeof( $this->constControlledDrawing ); $i++ ) 
 		{
 			$template = $this->constControlledDrawing[ $i ]->getTemplate();
+
 			$this->setDrawConst( $template, $constants[ $i ] );
 		}
 		

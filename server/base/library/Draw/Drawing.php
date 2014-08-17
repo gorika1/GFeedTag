@@ -32,7 +32,7 @@ class Drawing extends MasterDrawing
 	protected function setList( $name )
 	{
 		//Establece el directorio de las listas de una vista			
-		$directory = 'client/html/app/' . $this->folder .'/lists/';
+		$directory = 'client/html/app/' . lcfirst( $this->className ) .'/lists/';
 		// Obtiene el template a procesar
 		$this->template = file_get_contents( $directory . $name . '.html' );
 	}

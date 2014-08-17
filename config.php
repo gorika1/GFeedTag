@@ -3,10 +3,14 @@
 return array(
 	'Master Page' => array(
 		'HEAD' 		=> 'head',
-		'HEADER' 	=> 'header',
 		'FOOTER' 	=> 'footer',
-		'Extras' 	=> array(
-			'NAV' 	=> 'nav',
+		'With Controller'  => array(
+			'HEADER' => array(
+				'Files Names' => 'Header',
+			),
+		),
+		'Extras'	=> array(
+			'NAV' => 'nav',
 		),
 	),
 

@@ -131,3 +131,9 @@ a.hashtag-delete.added {
 .checkbox {
 	margin-top: 15px;
 }
+
+.label-warning {
+	font-family: Georgia, Arial, sans-serif;
+	font-size: 12px;
+	margin-top: 5px;
+}

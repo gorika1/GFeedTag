@@ -38,6 +38,7 @@ class LoginController
 		{
 			$_SESSION[ 'user' ] = $account[ 'user' ];
 			$_SESSION[ 'idUser' ] = $account[ 'idUser' ];
+			$_SESSION[ 'userName' ] = $account[ 'name' ];
 			echo 'true';
 		} // end if...else
 		

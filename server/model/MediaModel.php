@@ -134,12 +134,19 @@ class MediaModel
 			$url = $photos[ 'data' ][ $i ][ 'images' ][ 'standard_resolution' ][ 'url' ];
 
 			$text = $photos[ 'data' ][ $i ][ 'caption' ][ 'text' ];
+
+			// Escapa los corazones poder insertar en la base de datos
+			$text = str_replace( "\\u003c3", "<3", $text );
+
 			// Limita el texto a 100 caractares
 			if( strlen( $text ) > 100 )
 				$text = substr( $text, 0, 96 ) . '...';
 
 			// Escapa las comillas para poder insertar en la base de datos
 			$text = str_replace( "'", "\'", $text );
+
+			// Escapa las etiquetas
+			$text = str_replace( "<", "&lt;", $text );
 
 			$time = $photos[ 'data' ][ $i ][ 'caption' ][ 'created_time' ];
 			$screen_name = $photos[ 'data' ][ $i ][ 'user' ][ 'username' ];

@@ -61,6 +61,7 @@ class GMySqli
 			} else { //Si hay una consulta fallida
 				self::$query;
 				throw new \Exception( 'Error ' . self::$mysqli->errno . ': ' . self::$mysqli->error );
+				echo GMySqli::viewQuery();
 			}//end if..else
 
 			self::freeResult( $result );//Libera memoria
@@ -73,6 +74,7 @@ class GMySqli
 			{
 				self::$registers = false;//o false en caso de haber algun error
 				throw new \Exception( 'Error ' . self::$mysqli->errno . ': ' . self::$mysqli->error );
+				echo GMySqli::viewQuery();
 			} // end if...else
 		}//end if..else externo
 
@@ -246,7 +248,6 @@ class GMySqli
 		} // end if...else
 		
 		self::$query = strip_tags( self::$query );
-		
 		$bool = self::execQuery( self::$query );
 			
 		return $bool;
