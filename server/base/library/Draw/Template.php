@@ -71,8 +71,8 @@ class Template
 		    $filesName = $actual[ 'Files Names' ];
 		    $filesName2 = lcfirst( $filesName );
 
-		    // Obtiene el controlador
-		    require_once 'server/controller/' . $filesName . 'Controller.php';//Obtiene el controller
+		    // Obtiene el controller
+		    require_once 'server/controller/' . $filesName . 'Controller.php';
 
 		    // Obtiene el drawing
 		    require_once 'server/drawing/' . $filesName . 'Drawing.php';
@@ -83,9 +83,10 @@ class Template
 		    // Obtiene el Drawing
 		    $class = $filesName . 'Drawing();';
 
-		    eval( "\$obj[] = new $class" ); //crea los objetos Drawing
+		    //crea los objetos Drawing
+		    eval( "\$obj[] = new $class" );
 		}
-		
+
 		return $obj; //retorna el array de objetos drawing constantes controlados
 	}//end processWithController
 

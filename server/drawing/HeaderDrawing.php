@@ -29,11 +29,11 @@ class HeaderDrawing extends MasterDrawing
 		{
 			$this->list = array(
 				'UserName' => $this->nombreUsuario, //el nombre
-			);			
+			);
+
+			$this->translateConst( $this->list, $this->template );	
 		}
 
-		$this->translateConst( $this->list, $this->template );
-		
 		return $this->template;
 	}
 

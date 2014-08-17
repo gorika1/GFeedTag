@@ -22,6 +22,7 @@ class MediaModel
 		return $photos;
 	} // end getTwitterMedia
 
+	// Obtiene el tiempo de la ultima publicacion
 	public function getLastTime( $prevTime = 1 )
 	{
 		$query = 'SELECT MAX( time ) AS time FROM Media;';
@@ -71,11 +72,12 @@ class MediaModel
 				$mediaUrl = $tweets[ 'statuses' ][ $i ][ 'entities' ][ 'media' ][ 0 ][ 'media_url' ];
 				
 				// tweet text
-				$tweetUrl = $tweets[ 'statuses' ][ $i ][ 'entities' ][ 'media' ][ 0 ][ 'url' ];				
+				$tweetUrl = $tweets[ 'statuses' ][ $i ][ 'entities' ][ 'media' ][ 0 ][ 'url' ];	
+
 				$text = $tweets[ 'statuses' ][ $i ][ 'text' ];
 				$text = str_replace( $tweetUrl, '', $text );
-				if( strlen( $text ) > 100 )
-					$text = substr( $text, 0, 96 ) . '...';
+				$text = $this->formatText( $text );
+				
 
 				// tweet time
 				$time = strtotime( $tweets[ 'statuses'][ $i ][ 'created_at' ] );
@@ -83,10 +85,14 @@ class MediaModel
 				// tweet owner
 				$screen_name = $tweets[ 'statuses' ][ $i ][ 'user' ][ 'screen_name' ];
 
-				// Pasa 1 para indicar que el dato viene desde twitter
-				GMySqli::setRegister( 'Media', '*', 
+				// Comprueba de que el texto no posea palabras censuradas
+				if( $this->checkText( $text ) )
+				{
+					// Pasa 1 para indicar que el dato viene desde twitter
+					GMySqli::setRegister( 'Media', '*', 
 										array( $id, $_SESSION[ 'idUser' ], $mediaUrl, $text, $time, $screen_name, 1  ) );
-					
+				} // end if
+
 			} // end if
 		} // end foreach
 	} // end saveTweets
@@ -120,7 +126,7 @@ class MediaModel
 		return $access_token[ 0 ][ 'insta_token' ];
 	} // end getInstagramToken
 
-
+	// Guarda las publicaciones de Instagram
 	public function saveInstagramPhotos( &$photos )
 	{
 		// Compara el next_insta_id ya que se hace un ciclo para cubrir todos los hashtags configurados
@@ -134,32 +140,24 @@ class MediaModel
 			$url = $photos[ 'data' ][ $i ][ 'images' ][ 'standard_resolution' ][ 'url' ];
 
 			$text = $photos[ 'data' ][ $i ][ 'caption' ][ 'text' ];
+			$text = $this->formatText( $text );
 
-			// Escapa los corazones poder insertar en la base de datos
-			$text = str_replace( "\\u003c3", "<3", $text );
-
-			// Limita el texto a 100 caractares
-			if( strlen( $text ) > 100 )
-				$text = substr( $text, 0, 96 ) . '...';
-
-			// Escapa las comillas para poder insertar en la base de datos
-			$text = str_replace( "'", "\'", $text );
-
-			// Escapa las etiquetas
-			$text = str_replace( "<", "&lt;", $text );
 
 			$time = $photos[ 'data' ][ $i ][ 'caption' ][ 'created_time' ];
 			$screen_name = $photos[ 'data' ][ $i ][ 'user' ][ 'username' ];
 
-			// Pasa 2 para indicar que el dato viene desde instagram
-			GMySqli::setRegister( 'Media', '*', array( 
-									$idMedia, $_SESSION[ 'idUser' ], $url, $text, $time, $screen_name, 2  ) );
-
+			// Comprueba de que el texto no posea palabras censuradas
+			if( $this->checkText( $text ) )
+			{
+				// Pasa 2 para indicar que el dato viene desde instagram
+				GMySqli::setRegister( 'Media', '*', array( 
+										$idMedia, $_SESSION[ 'idUser' ], $url, $text, $time, $screen_name, 2  ) );
+			} // end if
 			 
 		} // end for
 	} // end saveInstaPhotos
 
-
+	// Obtiene el next_id de Instagram
 	public function getNextInstaId()
 	{
 		$reg = GMySqli::getRegister( 'Users', array( 'next_insta_id' ), 'idUser = ' . $_SESSION[ 'idUser' ] );
@@ -167,6 +165,7 @@ class MediaModel
 		return $reg[ 'next_insta_id' ];		
 	} // end getLastTweetId
 
+	// Establece el next_id de Instagram
 	public function setNextInstaId()
 	{
 		//echo $this->next_insta_id;
@@ -174,6 +173,46 @@ class MediaModel
 			GMySqli::updateRegister( 'Users', array(  'next_insta_id' => $this->next_insta_id ), "idUser = " . $_SESSION[ 'idUser' ] );
 	} // end setNextInstaId
 
+	// Formatea el texto para poder insertarlo en la base de datos
+	private function formatText( $text )
+	{
+		// Escapa los corazones poder insertar en la base de datos
+		$text = str_replace( "\\u003c3", "<3", $text );
+
+		// Limita el texto a 100 caractares
+		if( strlen( $text ) > 100 )
+			$text = substr( $text, 0, 96 ) . '...';
+
+		// Escapa las comillas para poder insertar en la base de datos
+		$text = str_replace( "'", "\'", $text );
+
+		// Escapa las etiquetas
+		$text = str_replace( "<", "&lt;", $text );
+
+		return $text;
+	} // end formatText
+
+	// Comprueba de que el texto no tenga palabras censuradas
+	private function checkText( $text )
+	{
+		$blacklist = $this->getBlackList();
+		$bool = true;
+		foreach( $blacklist as $word )
+		{
+			if( stripos( $text, $word[ 'palabra' ] ) )
+				$bool = false;
+		}
+
+		return $bool;
+	}
+
+	// Obtiene el blacklist
+	private function getBlackList()
+	{
+		return GMySqli::getRegisters( 'Blacklist', array( 'palabra' ), 'Users_idUser = ' . $_SESSION[ 'idUser' ] );
+	} // end getBlackList
+
+	// Compara los next_id de Instagram
 	private function compareNextInstaId( &$pagination )
 	{
 		if( isset( $pagination[ 'min_tag_id' ] ) )
@@ -185,7 +224,6 @@ class MediaModel
 			} // end if
 		} // end if
 	} // end setNextInstaId
-
 
 
 	/*

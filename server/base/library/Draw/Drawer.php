@@ -57,7 +57,8 @@ class Drawer extends Template {
 
 
 	//Dibuja las partes principales de las paginas
-	private function principalDraw() {
+	private function principalDraw() 
+	{
 
 		$this->drawing[ 'HEAD' ] = $this->getHead();
 
@@ -68,7 +69,8 @@ class Drawer extends Template {
 		$this->drawing[ '[Lx]' ] = '';
 
 		// Obtiene todos los que necesitan un controlador
-		$this->drawConstWithController();
+		if( isset( $this->checked ) )
+			$this->drawConstWithController();
 
 	}//end principalTranslate
 
@@ -106,9 +108,9 @@ class Drawer extends Template {
 	//Traduce un template de listado
 	private function drawList( &$array, &$template ) {
 
-		foreach( $array as $key => $valor ) 
+		foreach( $array as $key => $valor )
 		{
-			$template = str_replace( '{'.$key.'}', $valor, $template );			
+			$template = str_replace( '{'.$key.'}', $valor, $template );										
 		}//end foreach
 
 		//Devuelve un template traducido
@@ -119,8 +121,6 @@ class Drawer extends Template {
 
 
 	//************************************************************************************
-
-
 	public function draw( &$array = array(), &$template = null ) {
 		
 		//Si se establecio un template, quiere decir que se traduce una lista
@@ -183,7 +183,7 @@ class Drawer extends Template {
 	}//end setDrawictionaryConst
 
 
-	// Dibuja 
+	// Agrega las plantillas de las constantes con controlador
 	public function drawConstWithController()
 	{
 		$constants = array();

@@ -131,8 +131,6 @@ class ViewMediaController extends ControllerAJAX {
 						$this->myMedia->getNextInstaId()
 					);
 
-			
-
 			$photos = json_decode( file_get_contents( $url ), true );
 			//Guarda el payload en la base de datos
 			$this->myMedia->saveInstagramPhotos( $photos );
