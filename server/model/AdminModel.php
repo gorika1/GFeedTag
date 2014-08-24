@@ -6,22 +6,31 @@ class AdminModel
 	// Obtiene el recuento de acuerdo a la red social utilizada
 	public function getRecount()
 	{
-		$counts[ 'twitter' ] = GMySQLi::getCountRegisters( 'Media', 'idMedia', '_from = 1 AND Users_idUser = ' . $_SESSION[ 'idUser' ] );
-		$counts[ 'insta' ] = GMySQLi::getCountRegisters( 'Media', 'idMedia', '_from = 2 AND Users_idUser = ' . $_SESSION[ 'idUser' ] );
+		$counts[ 'twitter' ] = GMySQLi::getCountRegisters( 'Media', 'idMedia', 
+											'_from = 1 AND Users_idUser = ' . $_SESSION[ 'idUser' ] . ' AND time > ' . $this->getInitialDate() );
+		$counts[ 'insta' ] = GMySQLi::getCountRegisters( 'Media', 'idMedia', 
+											'_from = 2 AND Users_idUser = ' . $_SESSION[ 'idUser' ] . ' AND time > ' . $this->getInitialDate() );
 
 		return $counts;
 	} // end getRecount
 
 
 	// Obtiene la fecha inicial de las publicaciones
-	public function getInitialDate()
+	// La variable formated sirve para decir que se quiere
+	// la fecha en formato d-m-Y para mostrarlo en el config
+	public function getInitialDate( $formated = false )
 	{
 		$register = GMySQLi::getRegister( 'Users', array( 'initialDate' ), 'idUser = ' . $_SESSION[ 'idUser' ] );
 
-		if( $register[ 'initialDate' ] == 0 )
-			return 'Traer desde todos los tiempos';
+		if( $formated == true )
+		{
+			if( $register[ 'initialDate' ] == 0 )
+				return 'Traer desde todos los tiempos';
 
-		return date( "d-m-Y", $register[ 'initialDate' ]);
+			return date( "d-m-Y", $register[ 'initialDate' ] );	
+		} // end if
+
+		return $register[ 'initialDate' ];
 	} // end getInitialDate
 
 	// Actualiza la fecha inicial para traer las imagenes
@@ -68,7 +77,20 @@ class AdminModel
 	public function deleteHashtag( $idHashtag )
 	{
 		GMySQLi::deleteRegister( 'Hashtags', 'idHashtag =' . $idHashtag );
-		echo GMySQLi::viewQuery();
+
+		// Elimina toda la media del user
+		// Debido a que debe reiniciar el id
+		// de las ultimas publicaciones de twitter e instagram
+		// en la tabla Users
+		$medias = GMySQLi::getRegisters( 'Media', array( 'idMedia', '_from' ),
+											'Users_idUser = ' . $_SESSION[ 'idUser' ] );
+		foreach ( $medias as $media ) 
+		{
+			GMySQLi::deleteRegister( 'Media', 'idMedia = ' . $media[ 'idMedia' ] . ' AND _from = ' . $media[ '_from' ] );
+		} // end foreach
+
+		GMySQLi::updateRegister( 'Users', array( 'next_tw_id' => 1, 'next_insta_id' => 1), 
+								 'idUser = ' . $_SESSION[ 'idUser' ] );
 	} // end deleteHashtag
 
 

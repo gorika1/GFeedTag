@@ -16,14 +16,14 @@ class GalleryController extends ControllerAJAX
 			if( $_POST[ 'delete' ] == 'media' )
 			{	
 				// Si no existe el archivo de registros eliminados	
-				if( ! is_file( 'server/deleted.dat' ) )
+				if( ! is_file( 'server/'. $_SESSION[ 'idUser' ] .'_deleted.dat' ) )
 				{
-					$file = fopen( 'server/deleted.dat', 'a' );
+					$file = fopen( 'server/'. $_SESSION[ 'idUser' ] . '_deleted.dat', 'a' );
 					fwrite( $file, $_POST[ 'urlMedia' ] );
 				}
 				else
 				{
-					$file = fopen( 'server/deleted.dat', 'a' );
+					$file = fopen( 'server/'. $_SESSION[ 'idUser' ] .'_deleted.dat', 'a' );
 					fwrite( $file, "\n" . $_POST[ 'urlMedia' ] );
 				} // end if...else
 

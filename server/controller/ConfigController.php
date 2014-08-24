@@ -50,8 +50,9 @@ class ConfigController extends ControllerAJAX
 		else
 		{
 			$drawing = new ConfigDrawing();
-
-			$initialDate = $myAdmin->getInitialDate();
+	
+			// Obtiene la fecha inicial de manera formateada
+			$initialDate = $myAdmin->getInitialDate( true );
 
 			$drawing->drawPage( 'Configurar | FeedTag', 
 								array( 'Hashtags()', 'Blacklist()' ),

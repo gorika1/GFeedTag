@@ -33,19 +33,47 @@ class ViewMediaController extends ControllerAJAX {
 			// Si es para obtener las imagenes
 			if( $_POST[ 'get' ] == 'Photos' )
 			{
-				$this->getTwitterMedia();
-				$this->getInstagramMedia();
-				$this->callDraw( $this->drawing, 'Photos', 
+				// Si es en la primera llamada para obtener las imagenes
+				if( $_POST[ 'lastTime' ] == 1 )
+				{
+					$myMedia = new MediaModel();
+					if( sizeof( $myMedia->getTags() ) )
+					{
+						$this->getTwitterMedia();
+						$this->getInstagramMedia();
+
+						$initialDate = $this->myMedia->getInitialDate();
+
+						$this->callDraw( $this->drawing, 'Photos', 
+									array( $initialDate, $_POST[ 'lastPos' ], true ) );
+					}
+					else
+					{
+						// Si no hay un hashtag configurado
+						// emite un codigo para avisar del problema
+						echo json_encode( array( 'error' => 1 ) );
+					} // end if...else interno					
+					
+				}
+				else 
+				{
+					$this->getTwitterMedia();
+					$this->getInstagramMedia();
+
+					$this->callDraw( $this->drawing, 'Photos', 
 								array( $_POST[ 'lastTime' ], $_POST[ 'lastPos' ], true ) );
-			}
+				} // end if...else
+				
+			} // end if $_POST[ 'get' ]
+
 			// Si es para obtener el registro de las imagenes borradas en el admin
 			else if ( $_POST [ 'get' ] == 'PhotosDeleted' )
 			{
 				// Comprueba que exista el registro
 				// de imagenes eliminadas y lo retorna 
-				if( is_file( 'server/deleted.dat' ) )
+				if( is_file( 'server/'. $_SESSION[ 'idUser' ] . '_deleted.dat' ) )
 				{
-					$file = fopen( 'server/deleted.dat', 'r' );
+					$file = fopen( 'server/'. $_SESSION[ 'idUser' ] . '_deleted.dat', 'r' );
 					$data = array();
 
 					while ( !feof( $file ) )  
@@ -54,7 +82,7 @@ class ViewMediaController extends ControllerAJAX {
 					}
 
 					fclose( $file );
-					unlink( 'server/deleted.dat' );
+					unlink( 'server/'. $_SESSION[ 'idUser' ] . '_deleted.dat' );
 					echo json_encode( $data );
 				} // end if
 				
@@ -133,7 +161,7 @@ class ViewMediaController extends ControllerAJAX {
 
 			$photos = json_decode( file_get_contents( $url ), true );
 			//Guarda el payload en la base de datos
-			$this->myMedia->saveInstagramPhotos( $photos );
+			$this->myMedia->saveInstagramPhotos( $photos, $tag );
 
 		} // end for
 

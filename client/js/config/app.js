@@ -81,10 +81,17 @@ $(document).on( 'ready', function(){
 	*/
 	// Si se da click en guardar
 	$('.hashtag-save').on( 'click', function() {
-		// Modifica el texto
-	    element.text(  $('div#hashtag-textbox .form-control').val() );
-	    // Guarda en la base de datos
-	    updateHashtagInDB( $('div#hashtag-textbox .form-control').val() );
+
+		var newHashtag = $('div#hashtag-textbox .form-control').val();
+
+		// Solo si el nuevo hashtag es distinto al anterior
+		if( newHashtag != hashtag )
+		{			
+			// Modifica el texto
+		    element.text( newHashtag );
+		    // Guarda en la base de datos
+		    updateHashtagInDB( newHashtag );
+		}
 	    // Cierra la ventana
 	    $('body').unblock();
 	});

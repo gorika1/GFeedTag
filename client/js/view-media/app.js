@@ -18,6 +18,7 @@ function getMediaFirstTime()
 			alert( 'Un error ha ocurrido. Por favor recarge la página');
 		},
 		success: function( data ) {
+			// Si se devolvieron datos
 			if( data.media )
 			{ 	
 				// inserta los atributos last-time y last-pos
@@ -34,7 +35,47 @@ function getMediaFirstTime()
 					getPhotos();
 				}, 4000);
 	
+			}
+			// Si se devolvio un codigo de error
+			else if( data.error ){
+				// Si el error se produce porque no hay un hashtag configurado
+				if( data.error === 1 )
+				{
+					$('#bg').block({ 
+				        message: '<h1 style="font-size:22px">Debe añadir por lo menos un hashtag en la configuración</h1>', 
+				        css: { 
+				            border: '3px solid #a00',
+				            width: '50%'
+				        },
+				        overlayCSS:  { 
+				            backgroundColor: '#f8f8f8', 
+				            opacity: 1, 
+				            cursor: 'wait'
+				        }, 
+				    }); // end $('#bg').block()
+				} // end if
+
 			} // end if
+			// Si data.media fue null
+			// no hay datos que mostrar
+			else 
+			{
+				$('#bg').block({ 
+			        message: '<h1 style="font-size:22px">Aún no hay imágenes con los hashtags configurados</h1>', 
+			        css: {
+			        	backgroundColor: '#AA3939', 
+			            color: '#fff',
+			            border: '3px solid #a00',
+			            width: '50%'
+			        },
+			        overlayCSS:  { 
+			            backgroundColor: '#f8f8f8', 
+			            opacity: 1, 
+			            cursor: 'wait'
+			        },
+				 });
+				$('.blockUI.blockMsg.blockElement h1').css({ 'color': '#f8f8f8' });
+			}// end if...else
 		},
 		type: 'POST',
 		timeout: 45000

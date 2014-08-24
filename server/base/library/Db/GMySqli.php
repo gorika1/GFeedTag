@@ -60,8 +60,7 @@ class GMySqli
 
 			} else { //Si hay una consulta fallida
 				self::$query;
-				throw new \Exception( 'Error ' . self::$mysqli->errno . ': ' . self::$mysqli->error );
-				echo GMySqli::viewQuery();
+				throw new \Exception( GMySqli::viewQuery() . 'Error ' . self::$mysqli->errno . ': ' . self::$mysqli->error );				
 			}//end if..else
 
 			self::freeResult( $result );//Libera memoria
@@ -73,8 +72,7 @@ class GMySqli
 			else
 			{
 				self::$registers = false;//o false en caso de haber algun error
-				throw new \Exception( 'Error ' . self::$mysqli->errno . ': ' . self::$mysqli->error );
-				echo GMySqli::viewQuery();
+				throw new \Exception( GMySqli::viewQuery() . 'Error ' . self::$mysqli->errno . ': ' . self::$mysqli->error );				
 			} // end if...else
 		}//end if..else externo
 
@@ -129,7 +127,7 @@ class GMySqli
 		if( $result = self::$mysqli->query( self::$query ) )
 			self::$registers = $result->fetch_assoc();//Se guarda un array asociativo del resultado			
 		else
-			throw new \Exception( 'Error ' . self::$mysqli->errno . ': ' . self::$mysqli->error );
+			throw new \Exception( GMySqli::viewQuery() . 'Error ' . self::$mysqli->errno . ': ' . self::$mysqli->error );
 
 
 		self::freeResult( $result );

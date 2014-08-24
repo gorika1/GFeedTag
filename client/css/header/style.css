@@ -1,0 +1,21 @@
+.dropdown-toggle:hover,
+.dropdown-toggle:focus
+.dropdown-toggle:active {
+	background-color: rgba(0, 0, 0, 0.30) !important;
+}
+.dropdown.user:active,
+.dropdown.user:focus,
+.dropdown.user:hover {
+	background-color: rgba(0, 0, 0, 0.30) !important;
+}
+.nav .open>a {
+	background-color: rgba(0, 0, 0, 0.30) !important;
+}
+.nav>li>a:hover, .nav>li>a:focus{
+	background-color: transparent;
+}
+
+.username {
+	color: #FFF;
+}
+

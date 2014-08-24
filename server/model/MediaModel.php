@@ -62,9 +62,23 @@ class MediaModel
 
 		for( $i = 0; $i < $size; $i++ )
 		{
+
 			// Extrae los datos del tweet solo si posee una imagen
 			if( isset( $tweets[ 'statuses' ][ $i ][ 'entities' ][ 'media' ] ) )
 			{
+				// Extrae los hashtags de la publicacion en cuestion
+				$hashtags = $tweets[ 'statuses' ][ $i ][ 'entities' ][ 'hashtags' ];
+				$idHashtag;
+				// Por cada hashtag
+				foreach( $hashtags as $hashtag )
+				{
+					// Si el hasthag analizado se encuentra registrado en la tabla Hashtags
+					// Lo guarda en idHashtag
+					if( ( $idHashtag = $this->getHashtagByName( $hashtag[ 'text' ] ) ) )						
+						break; // Sale del ciclo
+
+				} // end foreach
+
 				// tweet id
 				$id = $tweets[ 'statuses' ][ $i ][ 'id_str' ];
 
@@ -90,7 +104,7 @@ class MediaModel
 				{
 					// Pasa 1 para indicar que el dato viene desde twitter
 					GMySqli::setRegister( 'Media', '*', 
-										array( $id, $_SESSION[ 'idUser' ], $mediaUrl, $text, $time, $screen_name, 1  ) );
+										array( $id, $_SESSION[ 'idUser' ], $idHashtag, $mediaUrl, $text, $time, $screen_name, 1  ) );
 				} // end if
 
 			} // end if
@@ -127,7 +141,7 @@ class MediaModel
 	} // end getInstagramToken
 
 	// Guarda las publicaciones de Instagram
-	public function saveInstagramPhotos( &$photos )
+	public function saveInstagramPhotos( &$photos, $hashtag )
 	{
 		// Compara el next_insta_id ya que se hace un ciclo para cubrir todos los hashtags configurados
 		$this->compareNextInstaId( $photos[ 'pagination' ] );
@@ -137,6 +151,14 @@ class MediaModel
 		for( $i = 0; $i < $size; $i++ )
 		{
 			$idMedia = $photos[ 'data' ][ $i ][ 'caption' ][ 'id' ];
+
+			// Si por alguna extraña razon, no tiene datos en el caption
+			// el cual proporciona el id y el created_time
+			if( !$idMedia )
+				continue;
+
+			$idHashtag = $this->getHashtagByName( $hashtag );
+
 			$url = $photos[ 'data' ][ $i ][ 'images' ][ 'standard_resolution' ][ 'url' ];
 
 			$text = $photos[ 'data' ][ $i ][ 'caption' ][ 'text' ];
@@ -151,7 +173,7 @@ class MediaModel
 			{
 				// Pasa 2 para indicar que el dato viene desde instagram
 				GMySqli::setRegister( 'Media', '*', array( 
-										$idMedia, $_SESSION[ 'idUser' ], $url, $text, $time, $screen_name, 2  ) );
+										$idMedia, $_SESSION[ 'idUser' ], $idHashtag, $url, $text, $time, $screen_name, 2  ) );
 			} // end if
 			 
 		} // end for
@@ -172,6 +194,14 @@ class MediaModel
 		if( $this->next_insta_id > 0 )
 			GMySqli::updateRegister( 'Users', array(  'next_insta_id' => $this->next_insta_id ), "idUser = " . $_SESSION[ 'idUser' ] );
 	} // end setNextInstaId
+
+
+	// Obtiene la fecha fijada en el admin
+	public function getInitialDate()
+	{
+		$date = GMySQLi::getRegister( 'Users', array( 'initialDate' ), 'idUser = ' . $_SESSION[ 'idUser' ] );
+		return $date[ 'initialDate' ];
+	} // end getFromDate
 
 	// Formatea el texto para poder insertarlo en la base de datos
 	private function formatText( $text )
@@ -226,13 +256,23 @@ class MediaModel
 	} // end setNextInstaId
 
 
+	// Obtiene el id de un hashtag
+	private function getHashTagByName( $hashtag )
+	{
+		$hashtag = GMySqli::getRegister( 'Hashtags', array( 'idHashtag' ), 
+										'hashtag = "' . $hashtag . '" AND Users_idUser = ' . $_SESSION[ 'idUser' ] );
+
+		return $hashtag[ 'idHashtag' ];
+	} // en getHashtagByName
+
+
 	/*
 		FOR THE GALLERY IN THE ADMIN
 	*/
 	public function getGallery()
 	{
 		$media = GMySqli::getRegisters( 'Media', array( 'idMedia', 'url', 'text', 'screen_name', '_from' ),
-											'Users_idUser = ' . $_SESSION[ 'idUser' ],
+											'Users_idUser = ' . $_SESSION[ 'idUser' ] . ' AND time > ' . $this->getInitialDate(),
 											'time DESC' );
 
 		return $media;
