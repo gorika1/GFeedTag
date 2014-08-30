@@ -8,12 +8,20 @@ class LoginController
 {
 	public function __construct()
 	{
-
-		if( !isset( $_POST[ 'user' ] ) and !isset( $_POST[ 'pass' ] ) )
+		// Si es para cerrar session
+		if( isset( $_GET[ 'logout' ] ) && $_GET[ 'logout' ] == true )
+		{
+			session_destroy();
+			global $server;
+			header( 'Location: ' . $server );
+		}
+		// Si no hay datos para ingresar al sistema
+		else if( !isset( $_POST[ 'user' ] ) and !isset( $_POST[ 'pass' ] ) )
 		{
 			$drawing = new LoginDrawing();
 			$drawing->drawPage( 'Ingresar FeedTag' );
 		}
+		// Si es para loguearse en el sistema
 		else
 		{
 			$this->login( $_POST[ 'user'], $_POST[ 'pass' ] );

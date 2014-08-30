@@ -19,3 +19,43 @@
 	color: #FFF;
 }
 
+.fa.fa-male,
+.fa.fa-caret-down {
+	color: #fff;
+}
+
+.fa.fa-caret-down {
+	font-size: 18px;
+}
+
+
+.dropdown-menu li>a:hover {
+	background-color: #e5e5e5 !important;
+}
+
+#profile-textbox {
+	display: none;
+}
+
+.control {
+	margin-bottom: 2em;
+}
+
+.control label {
+	font-size: 18px;
+	font-weight: normal;
+	text-align: left;
+	width: 80%;
+}
+
+.control input[type="text"],
+.control input[type="password"]{
+	background-color: #FFF;
+	border: 1px solid #BB9F84;
+	color: #000; 
+}
+
+#buttons-group {
+	margin: 0 3em 0 0;
+	text-align: right;
+}

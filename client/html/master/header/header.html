@@ -10,14 +10,47 @@
         <ul class="nav navbar-nav navbar-right  hidden-xs">
             <li class="dropdown user  hidden-xs"> 
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#"> 
-                    <i class="fa fa-male"></i> <span class="username">{UserName}</span> <i class="fa fa-caret-down"></i> 
+                    <i class="fa fa-male"></i> 
+                    <span id="user-name" class="username">{UserName}</span> 
+                    <i class="fa fa-caret-down"></i> 
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="#"><i class="fa fa-user"></i>Cambiar mis datos</a></li>
+                    <li id="change-profile"><a href="#"><i class="fa fa-user"></i>&nbsp;&nbsp;&nbsp;Cambiar mis datos</a></li>
                     <li class="divider"></li>
-                    <li><a href="#"><i class="fa fa-key"></i>Salir</a></li>
+                    <li><a href="../login/true"><i class="fa fa-key"></i>&nbsp;&nbsp;&nbsp;Salir</a></li>
                 </ul>
             </li>
         </ul>
     </div>
 </div>
+
+<!-- HASHTAG TEXBOX -->
+<div id="profile-textbox">
+    <h2>Modificar mis datos</h2><br />
+    <div class="control">
+        <label>Nombre
+            <input type="text" id="profile-name" class="form-control" placeholder="Nombre">
+        </label>
+    </div>
+    <div class="control">
+        <label> Nombre Usuario
+            <input type="text" id="profile-user" class="form-control" placeholder="Nombre de usuario">
+        </label>
+    </div>
+    <div class="control">
+        <label> Contraseña
+            <input type="password" id="profile-pass" class="form-control" placeholder="Contraseña">
+        </label>
+    </div>
+    <div class="control">
+        <label> Repetir Contraseña
+            <input type="password" id="profile-repeat-pass" class="form-control" placeholder="Repita su contraseña">
+        </label>
+    </div>
+    
+    <div id="buttons-group">
+        <input type="button" id="profile-save" class="btn btn-success btn-lg" value="Guardar" />
+        <input type="button" class="btn-cancel btn btn-danger btn-lg" value="Cancelar" />
+    </div>            
+</div>
+ <!-- /HASHTAG TEXBOX -->

@@ -78,7 +78,7 @@ function getMediaFirstTime()
 			}// end if...else
 		},
 		type: 'POST',
-		timeout: 45000
+		timeout: 120000
 	});
 } // end getMediaFirsTime
 

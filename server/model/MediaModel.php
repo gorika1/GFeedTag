@@ -114,7 +114,8 @@ class MediaModel
 
 	public function getNextTweetId()
 	{		
-		$reg = GMySqli::getRegister( 'Users', array( 'next_tw_id' ), 'idUser = ' . $_SESSION[ 'idUser'] );
+		$reg = GMySqli::getRegister( 'Users', array( 'next_tw_id' ), 
+									'idUser = ' . $_SESSION[ 'idUser'] );
 		return $reg[ 'next_tw_id' ];		
 	} // end getNextTweetId
 
@@ -141,58 +142,70 @@ class MediaModel
 	} // end getInstagramToken
 
 	// Guarda las publicaciones de Instagram
-	public function saveInstagramPhotos( &$photos, $hashtag )
+	public function saveInstagramPhotos( &$photos, $hashtag, $idHashtag )
 	{
 		// Compara el next_insta_id ya que se hace un ciclo para cubrir todos los hashtags configurados
-		$this->compareNextInstaId( $photos[ 'pagination' ] );
-	
-		$size = sizeof( $photos[ 'data' ] );
+		$this->setNextInstaId( $photos[ 0 ][ 'pagination' ], $idHashtag );
+		
+		// Cantidad de peticiones hechas a Instagram
+		$amount = sizeof( $photos ) - 1;
 
-		for( $i = 0; $i < $size; $i++ )
+		for( $i = 0; $i < $amount; $i++ )
 		{
-			$idMedia = $photos[ 'data' ][ $i ][ 'caption' ][ 'id' ];
+			// Cantidad de resultados por cada peticion
+			$size = sizeof( $photos[ $i ][ 'data' ] );
 
-			// Si por alguna extraña razon, no tiene datos en el caption
-			// el cual proporciona el id y el created_time
-			if( !$idMedia )
-				continue;
-
-			$idHashtag = $this->getHashtagByName( $hashtag );
-
-			$url = $photos[ 'data' ][ $i ][ 'images' ][ 'standard_resolution' ][ 'url' ];
-
-			$text = $photos[ 'data' ][ $i ][ 'caption' ][ 'text' ];
-			$text = $this->formatText( $text );
-
-
-			$time = $photos[ 'data' ][ $i ][ 'caption' ][ 'created_time' ];
-			$screen_name = $photos[ 'data' ][ $i ][ 'user' ][ 'username' ];
-
-			// Comprueba de que el texto no posea palabras censuradas
-			if( $this->checkText( $text ) )
+			for( $j = 0; $j < $size; $j++ )
 			{
-				// Pasa 2 para indicar que el dato viene desde instagram
-				GMySqli::setRegister( 'Media', '*', array( 
-										$idMedia, $_SESSION[ 'idUser' ], $idHashtag, $url, $text, $time, $screen_name, 2  ) );
-			} // end if
+
+				$idMedia = $photos[ $i ][ 'data' ][ $j ][ 'caption' ][ 'id' ];
+
+				// Si por alguna extraña razon, no tiene datos en el caption
+				// el cual proporciona el id y el created_time
+				if( !$idMedia )
+					continue;
+
+				$idHashtag = $this->getHashtagByName( $hashtag );
+
+				$url = $photos[ $i ][ 'data' ][ $j ][ 'images' ][ 'standard_resolution' ][ 'url' ];
+
+				$text = $photos[ $i ][ 'data' ][ $j ][ 'caption' ][ 'text' ];
+				$text = $this->formatText( $text );
+
+
+				$time = $photos[ $i ][ 'data' ][ $j ][ 'caption' ][ 'created_time' ];
+				$screen_name = $photos[ $i ][ 'data' ][ $j ][ 'user' ][ 'username' ];
+
+				// Comprueba de que el texto no posea palabras censuradas
+				if( $this->checkText( $text ) )
+				{
+					// Pasa 2 para indicar que el dato viene desde instagram
+					GMySqli::setRegister( 'Media', '*', array( 
+											$idMedia, $_SESSION[ 'idUser' ], $idHashtag, $url, $text, $time, $screen_name, 2  ) );
+				} // end if
+			}
 			 
 		} // end for
 	} // end saveInstaPhotos
 
 	// Obtiene el next_id de Instagram
-	public function getNextInstaId()
+	public function getNextInstaId( $idHashtag )
 	{
-		$reg = GMySqli::getRegister( 'Users', array( 'next_insta_id' ), 'idUser = ' . $_SESSION[ 'idUser' ] );
+		$reg = GMySqli::getRegister( 'Hashtags', array( 'next_insta_id' ), 
+									'idHashtag = ' . $idHashtag . ' AND Users_idUser = ' . $_SESSION[ 'idUser' ] );
 
 		return $reg[ 'next_insta_id' ];		
 	} // end getLastTweetId
 
 	// Establece el next_id de Instagram
-	public function setNextInstaId()
+	public function setNextInstaId( &$pagination, $idHashtag )
 	{
-		//echo $this->next_insta_id;
-		if( $this->next_insta_id > 0 )
-			GMySqli::updateRegister( 'Users', array(  'next_insta_id' => $this->next_insta_id ), "idUser = " . $_SESSION[ 'idUser' ] );
+		if( isset( $pagination[ 'min_tag_id' ] ) )
+		{
+		
+			GMySqli::updateRegister( 'Hashtags', array(  'next_insta_id' => $pagination[ 'min_tag_id' ] ), 
+									"idHashtag = " . $idHashtag . " AND Users_idUser = " . $_SESSION[ 'idUser' ] );
+		}
 	} // end setNextInstaId
 
 
@@ -202,6 +215,16 @@ class MediaModel
 		$date = GMySQLi::getRegister( 'Users', array( 'initialDate' ), 'idUser = ' . $_SESSION[ 'idUser' ] );
 		return $date[ 'initialDate' ];
 	} // end getFromDate
+
+
+	// indica si existen registros con un determinado hashtag
+	public function existRegisters( $hashtag )
+	{
+		$reg = GMySqli::getCountRegisters( 'Media', 'idMedia', 
+									'Hashtags_idHashtag = ' . $this->getHashtagByName( $hashtag ) . ' AND Users_idUser = ' . $_SESSION[ 'idUser' ] );
+
+		return $reg;
+	} // end existRegisters
 
 	// Formatea el texto para poder insertarlo en la base de datos
 	private function formatText( $text )
@@ -242,6 +265,7 @@ class MediaModel
 		return GMySqli::getRegisters( 'Blacklist', array( 'palabra' ), 'Users_idUser = ' . $_SESSION[ 'idUser' ] );
 	} // end getBlackList
 
+	/*
 	// Compara los next_id de Instagram
 	private function compareNextInstaId( &$pagination )
 	{
@@ -255,9 +279,9 @@ class MediaModel
 		} // end if
 	} // end setNextInstaId
 
-
+	*/
 	// Obtiene el id de un hashtag
-	private function getHashTagByName( $hashtag )
+	public function getHashTagByName( $hashtag )
 	{
 		$hashtag = GMySqli::getRegister( 'Hashtags', array( 'idHashtag' ), 
 										'hashtag = "' . $hashtag . '" AND Users_idUser = ' . $_SESSION[ 'idUser' ] );
@@ -278,6 +302,7 @@ class MediaModel
 		return $media;
 	} // end getGallery
 
+	// elimina un registro
 	public function deleteMedia( $idMedia, $from )
 	{
 		GMySqli::deleteRegister( 'Media', 'idMedia =' . $idMedia . ' AND _from =' . $from );

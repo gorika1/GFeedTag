@@ -57,7 +57,7 @@ class AdminModel
 	// Agrega un hashtag
 	public function addHashtag( $hashtag )
 	{
-		GMySQLi::setRegister( 'Hashtags', '*', array( null, $hashtag, $_SESSION[ 'idUser' ] ) );
+		GMySQLi::setRegister( 'Hashtags', '*', array( null, $hashtag, $_SESSION[ 'idUser' ], 1 ) );
 
 		// Devuelve el id del hashtag agregado
 		$lastId = GMySQLi::getRegisters( 'Hashtags', array( 'idHashtag' ), 
@@ -89,8 +89,11 @@ class AdminModel
 			GMySQLi::deleteRegister( 'Media', 'idMedia = ' . $media[ 'idMedia' ] . ' AND _from = ' . $media[ '_from' ] );
 		} // end foreach
 
-		GMySQLi::updateRegister( 'Users', array( 'next_tw_id' => 1, 'next_insta_id' => 1), 
+		GMySQLi::updateRegister( 'Users', array( 'next_tw_id' => 1 ), 
 								 'idUser = ' . $_SESSION[ 'idUser' ] );
+
+		GMySQLi::updateRegister( 'Hashtags', array( 'next_insta_id' => 1 ),
+								'idHashtag = ' . $idHashtag . ' AND Users_idUser = ' . $_SESSION[ 'idUser' ] );
 	} // end deleteHashtag
 
 
@@ -130,4 +133,22 @@ class AdminModel
 	{
 		GMySQLi::deleteRegister( 'Blacklist', 'idPalabra =' . $idWord );
 	} // end deleteHashtag
+
+	// Obtiene los datos de perfil del usuario
+	public function getProfile() 
+	{
+		$user = GMySQLi::getRegister( 'Users', array( 'idUser', 'user', 'pass', 'name' ), 'idUser = ' . $_SESSION[ 'idUser' ] );
+		return $user;
+	} // end getProfile
+
+	// Establece los datos del perfil del usuario
+	public function setProfile( $data )
+	{
+		GMySQLi::updateRegister( 'Users', array( 'user' => $data[ 'user' ],
+												'pass' => $data[ 'pass' ],
+												'name' => $data[ 'name' ]),
+								'idUser = ' . $_SESSION[ 'idUser' ] );
+
+		echo GMySQLi::viewQuery();
+	} // end setProfile
 } // end AdminModel

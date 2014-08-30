@@ -40,7 +40,7 @@ class ViewMediaController extends ControllerAJAX {
 					if( sizeof( $myMedia->getTags() ) )
 					{
 						$this->getTwitterMedia();
-						$this->getInstagramMedia();
+						$this->getInstagramMedia( true );
 
 						$initialDate = $this->myMedia->getInitialDate();
 
@@ -145,23 +145,65 @@ class ViewMediaController extends ControllerAJAX {
 
 	// Itera a traves de los distintos tags y realiza una peticion por tag
 	// debido a que Instagram no permite realizar peticiones multitag
-	private function getInstagramMedia()
+	private function getInstagramMedia( $firstTime = false )
 	{
+		// Cantidad de hashtags
 		$size = sizeof( $this->tags );
 
 		for( $i = 0; $i < $size; $i++ )
 		{
 			// Tag a Buscar
 			$tag = $this->tags[ $i ][ 'hashtag' ];
-			$url = sprintf( 'https://api.instagram.com/v1/tags/%s/media/recent?access_token=%s&count=100&min_tag_id=%s',
-						$tag, 
-						$this->myMedia->getInstagramToken(),
-						$this->myMedia->getNextInstaId()
-					);
 
-			$photos = json_decode( file_get_contents( $url ), true );
+			$idHashtag = $this->myMedia->getHashTagByName( $tag );
+
+			$next_insta_id = $this->myMedia->getNextInstaId( $idHashtag );
+
+
+			$url = sprintf( 'https://api.instagram.com/v1/tags/%s/media/recent?access_token=%s&count=30&min_tag_id=%s',
+							$tag, 
+							$this->myMedia->getInstagramToken(),
+							$next_insta_id
+						);
+
+			// Si es la primera llamada
+			if( $firstTime )
+			{
+				$gotAllResults = false;
+			    $photos = array();
+			    $count = 0;
+
+			    // Solo se permiten en total 4 peticiones a Instagram
+			    // es decir, un maximo de 120 fotos
+			    while( !$gotAllResults && $count < 4 ) 
+			    {
+			        $result = json_decode( file_get_contents( $url ), true );
+			        $photos[] = $result;
+
+			        if (!isset($result['pagination']['next_url'] )) 
+			        {
+			            $gotAllResults = true;
+			        } 
+			        else 
+			        {
+			            $url = $result['pagination']['next_url'];
+			        } // end if...else
+
+			        $count += 1;
+			    } // end while
+
+				//Guarda el payload en la base de datos
+				$this->myMedia->saveInstagramPhotos( $photos, $tag, $idHashtag );
+
+				return;
+			} // end if
+
+
+
+			$photos[] = json_decode( file_get_contents( $url ), true );
+		
 			//Guarda el payload en la base de datos
-			$this->myMedia->saveInstagramPhotos( $photos, $tag );
+			$this->myMedia->saveInstagramPhotos( $photos, $tag, $idHashtag );
 
 		} // end for
 

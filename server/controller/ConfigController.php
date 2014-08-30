@@ -19,6 +19,12 @@ class ConfigController extends ControllerAJAX
 			// Si es para actualizar la fecha inicial
 			else if ( $_POST[ 'update' ] == 'initialDate' )
 				$myAdmin->setInitialDate( $_POST[ 'date' ] );
+
+			// Si es para actualizar el perfil del usuario
+			else if( $_POST[ 'update' ] == 'profile' )
+			{
+				$myAdmin->setProfile( $_POST[ 'data' ] );
+			}
 		}
 
 		// Si es para eliminar registros
@@ -45,7 +51,14 @@ class ConfigController extends ControllerAJAX
 			else if( $_POST[ 'add' ] == "word" )
 				$myAdmin->addWord( $_POST[ 'word' ] );
 		}
-		
+		// Si llamada es para obtener datos
+		else if( isset( $_POST[ 'get' ] ) )
+		{
+			if( $_POST[ 'get' ] == 'profile' )
+			{
+				echo json_encode( $myAdmin->getProfile() );
+			} // end if
+		}
 		// Si es la llamada para la carga de la página
 		else
 		{

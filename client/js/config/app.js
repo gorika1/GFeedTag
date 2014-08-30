@@ -70,11 +70,6 @@ $(document).on( 'ready', function(){
 	    deleteWord( this );
     });
 
-    // Si se hace click fuera del textbox
-    $('body').on( 'click', '.blockUI.blockOverlay', function(){
-    	$('body').unblock();
-    });
-
 	/*
 		EVENTOS DEL TEXTBOX PARA MODIFICAR O ELIMINAR UN HASHTAG
 		EN LOS TEXTBOXES
@@ -101,12 +96,6 @@ $(document).on( 'ready', function(){
 		deleteHashtagInDB();
 		$('td#' + idHashtag ).parent().remove();
 		$('body').unblock();
-	});
-
-	// Si se hace click en cancelar
-	$('.hashtag-cancel').on('click', function() { 
-	    $('body').unblock(); 
-	    return false;
 	});
 
 });
