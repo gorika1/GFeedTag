@@ -40,7 +40,7 @@ class LoginController
 
 		if( !$account )
 		{
-			echo 'El nombre de usuario o contraseña no existe';
+			echo false;
 		}
 		else
 		{

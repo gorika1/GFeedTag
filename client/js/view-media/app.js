@@ -2,7 +2,7 @@ var oMedia = {}; // guarda las imagenes
 
 function getPhotos() {
     setInterval( getMedia, 120000 );
-    setInterval( getMediaDeleted, 30000 );
+    setInterval( getMediaDeleted, 100000 );
 }
 // Guarda los datos en un json
 // en la primera carga del sistema
@@ -75,6 +75,10 @@ function getMediaFirstTime()
 			        },
 				 });
 				$('.blockUI.blockMsg.blockElement h1').css({ 'color': '#f8f8f8' });
+				/*
+				$( '#last-time' ).attr( 'time', 1 );
+				$( '#last-time' ).attr( 'last-pos', 0 );
+				getPhotos();*/
 			}// end if...else
 		},
 		type: 'POST',
@@ -160,11 +164,20 @@ function drawPhotos( firstTime, data )
 	} // end if
 	else
 	{
+		/*
+		// Si el carousel aun no se habia iniciado
+		if( $('.blockUI.blockOverlay').length == 0 )
+		{
+			initCarousel();
+			$('body').unblock();
+		} // end if
+		*/
 		$.each( data, function(index, item) {
-			 $('#carousel img[pos="' + ( parseInt( item.position ) - 1 ) + '"]').after( 
+			$('#carousel img[pos="' + ( parseInt( item.position ) - 1 ) + '"]').after( 
 			 	'<img text ="' + parseText( item.text ) + '" src="' + item.URL + '" user="' + item.screenName + ' " pos="' + item.position + '" from="' + item.from + '" />' 
-			 );
+			);
 		});
+		
 	} // end if...else
 	
 } // end drawPhotos

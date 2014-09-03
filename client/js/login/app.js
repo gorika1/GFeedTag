@@ -1,9 +1,22 @@
 $( document ).on( 'ready', function(){
 	$( '#submit-form' ).on( 'click', function( e ){
 		e.preventDefault();
-		var user = $( '#user' ).val();
-		var pass = $( '#pass' ).val();
+		var user = $( '#user' ).val().trim();
+		var pass = $( '#pass' ).val().trim();
 
+		// Comprueba que se haya ingresado datos
+		if( user == '' )
+		{
+			alert( 'Ingrese un nombre de usuario' );
+			return;
+		}
+		else if( pass == '' )
+		{
+			alert( 'Ingrese la contraseña' );
+			return;
+		}
+
+		// Realiza la consulta a la base de datos
 		$.ajax({
 			url: '',
 			data: {'ajax':'true','login':'true', 'user': user, 'pass': pass },
@@ -14,13 +27,13 @@ $( document ).on( 'ready', function(){
 			},
 			success: function( data ) {
 				// Si se creo la sesión		
-				if( data === 'true')
+				if( data === 'true' )
 				{
 					window.location = 'admin/dashboard';	
 				}
 				else
 				{
-					console.log( data );
+					alert( 'Usuario y contraseña incorrectos' );
 				}
 			},
 			type: 'POST',
@@ -28,19 +41,3 @@ $( document ).on( 'ready', function(){
 		});
 	});
 });
-
-feedBack = function(){
-	$.blockUI({ 
-  		css: { 
-	        border: 'none', 
-	        padding: '15px', 
-	        backgroundColor: '#000', 
-	        '-webkit-border-radius': '10px', 
-	        '-moz-border-radius': '10px',
-	        'border-radius': '10px',
-	        opacity: .5, 
-	        color: '#FFF'
-   	 	},
-   	 	message:  '<h2 id="blockui-message" style="font-size: 20px">Autenticando...</h2>',
-    });
-} // end feedBack

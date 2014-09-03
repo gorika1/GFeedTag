@@ -148,7 +148,7 @@ class MediaModel
 		$this->setNextInstaId( $photos[ 0 ][ 'pagination' ], $idHashtag );
 		
 		// Cantidad de peticiones hechas a Instagram
-		$amount = sizeof( $photos ) - 1;
+		$amount = sizeof( $photos );
 
 		for( $i = 0; $i < $amount; $i++ )
 		{
@@ -217,13 +217,19 @@ class MediaModel
 	} // end getFromDate
 
 
-	// indica si existen registros con un determinado hashtag
-	public function existRegisters( $hashtag )
+	// Indica si existen registros con un determinado hashtag
+	public function existRegisters( $idHashtag )
 	{
-		$reg = GMySqli::getCountRegisters( 'Media', 'idMedia', 
-									'Hashtags_idHashtag = ' . $this->getHashtagByName( $hashtag ) . ' AND Users_idUser = ' . $_SESSION[ 'idUser' ] );
+		// Obtiene el valor de next_insta_id
+		$reg = GMySqli::getRegister( 'Hashtags', array( 'next_insta_id'), 
+									'idHashtag = ' . $idHashtag . ' AND Users_idUser = ' . $_SESSION[ 'idUser' ] );
 
-		return $reg;
+		// Si next_insta_id no es 1
+		// existen registros sobre ese hashtag
+		if( $reg[ 'next_insta_id' ] > 1 )
+			return true;
+		
+		return false;
 	} // end existRegisters
 
 	// Formatea el texto para poder insertarlo en la base de datos

@@ -57,14 +57,20 @@ class AdminModel
 	// Agrega un hashtag
 	public function addHashtag( $hashtag )
 	{
-		GMySQLi::setRegister( 'Hashtags', '*', array( null, $hashtag, $_SESSION[ 'idUser' ], 1 ) );
+		$count = GMySQLi::getCountRegisters( 'Hashtags', '*', 'Users_idUser = ' . $_SESSION[ 'idUser' ] );
 
-		// Devuelve el id del hashtag agregado
-		$lastId = GMySQLi::getRegisters( 'Hashtags', array( 'idHashtag' ), 
-								'Users_idUser = ' . $_SESSION[ 'idUser' ],
-								'idHashtag DESC', 1 );
+		if( $count < 3 )
+		{
+			GMySQLi::setRegister( 'Hashtags', '*', array( null, $hashtag, $_SESSION[ 'idUser' ], 1 ) );
 
-		echo $lastId[0]['idHashtag'];
+			// Devuelve el id del hashtag agregado
+			$lastId = GMySQLi::getRegisters( 'Hashtags', array( 'idHashtag' ), 
+									'Users_idUser = ' . $_SESSION[ 'idUser' ],
+									'idHashtag DESC', 1 );
+
+			echo $lastId[0]['idHashtag'];
+		} // end if
+		
 	} // end addHashtag
 
 	// Actualiza el hashtag
@@ -92,8 +98,18 @@ class AdminModel
 		GMySQLi::updateRegister( 'Users', array( 'next_tw_id' => 1 ), 
 								 'idUser = ' . $_SESSION[ 'idUser' ] );
 
-		GMySQLi::updateRegister( 'Hashtags', array( 'next_insta_id' => 1 ),
+
+		// Modifica todos los hashtags del usuario
+		// estableciendo el next_insta_id en 1
+		$idHashtags = GMySQLi::getRegisters( 'Hashtags', array( 'idHashtag' ), 'Users_idUser = ' . $_SESSION[ 'idUser' ] );
+
+		foreach ( $idHashtags as $idHashtag ) 
+		{
+			GMySQLi::updateRegister( 'Hashtags', array( 'next_insta_id' => 1 ),
 								'idHashtag = ' . $idHashtag . ' AND Users_idUser = ' . $_SESSION[ 'idUser' ] );
+		}
+
+		
 	} // end deleteHashtag
 
 

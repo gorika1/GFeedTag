@@ -59,3 +59,33 @@
 	margin: 0 3em 0 0;
 	text-align: right;
 }
+
+.icon-bar {
+	background-color: #FFF;
+}
+
+
+@media(min-width: 768px) {
+	.navbar-collapse.collapse {
+		display: none !important;
+	}
+}
+
+.navbar-toggle{
+	border-color: #FFF;
+	outline: 0 !important;
+}
+
+.navbar-collapse li a{
+	color: #FFF;
+}
+
+.navbar-collapse li:hover{
+	background: rgba( 0, 0, 0, .3 );
+}
+
+@media( max-width: 768px ) {
+	div.left-nav {
+		display: none;
+	}
+}

@@ -13,6 +13,12 @@ $(document).on( 'ready', function(){
         scrollInertia: 0
 	});
 
+    if( $('#media-table tbody tr').length >= 1 )
+    {
+        $('#no-gallery').css({'display':'none'});
+        $('#media-table').css({'display':'block'});
+    }
+
 	// Si se hace click para eliminar una foto 
 	$('#media-table .media-delete').on( 'click', function(){
         idMedia = $(this).attr( 'id-media' );
@@ -36,6 +42,11 @@ $(document).on( 'ready', function(){
         $('body').unblock();
         // Borra la fila correspondiente en la tabla
         $('a[id-media="' + idMedia + '"][from="' + from + '"]').parent().parent().remove();
+        if( $('#media-table tbody tr').length == 0 )
+        {
+            $('#media-table').remove();
+            $('#no-gallery').css({'display':'block'});
+        }
     });
 
     // Si se hace click en cancelar

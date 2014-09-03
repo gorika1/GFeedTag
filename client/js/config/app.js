@@ -6,6 +6,11 @@ $(document).on( 'ready', function(){
 
 	$( '.left-nav #config' ).addClass( 'current' );
 
+	if( $('#hashtag-list tbody').children( 'tr' ).length > 0 )
+	{
+		$('#no-hashtag').css({'display':'none'});
+	} // end if
+
 	// Datepicker para elegir la fecha de las publicaciones
 	datePicker();
 
@@ -26,18 +31,39 @@ $(document).on( 'ready', function(){
 		hashtag = $('#hashtag-input').val();
 		// Borra los espacios
 		hashtag = hashtag.replace(/ /g, '');
+		hashtag = hashtag.replace( '#', '' );
 
 		// Si hay un hashtag para agregar a la base de datos
 		if ( hashtag.length > 0 )
 		{
-			// Agrega el hashtag en la base de datos y en el DOM
-			addHashtagInDB( hashtag );
-		}
+			// Si aún no existen 3 hashtagas
+			if( $('#hashtag-list tr' ).length < 3 )
+			{
+				var sw = true;
+
+				// Compara el hashta a agregar con los ya agregados
+				$('#hashtag-list tr' ).each( function( index, element ){
+					if(  hashtag.toLowerCase() === $(this).children(':first').text().toLowerCase() )
+						sw = false
+				});
+
+				// Si no es repetido
+				if( sw )
+				{
+					// Agrega el hashtag en la base de datos y en el DOM
+					addHashtagInDB( hashtag );
+				} // end if interno
+			} 
+			else
+			{
+				alert( 'Solo puede agregar hasta 3 hashtags' );
+			}// end if...else externo		
+		} // end if
 
 		// Reestablece el valor del input y hace focus en el
 		$('#hashtag-input').val('');
 		$('#hashtag-input').focus();
-	});
+	}); // end $('#hashtag-add').on()
 
 	// Si se presiona el boton para editar un hashtag
 	$('#hashtag-list').on( 'click', '.hashtag-edit', function() {
@@ -56,8 +82,21 @@ $(document).on( 'ready', function(){
 		// Si hay un hashtag para agregar a la base de datos
 		if ( word.length > 0 )
 		{
-			// Agrega el hashtag en la base de datos y en el DOM
-			addWordInDB( word.toLowerCase() );
+			var sw = true;
+
+			// Compara la palabra a agregar con los ya agregados
+			$('#black-list table tr' ).each( function( index, element ){
+				if(  word.toLowerCase() === $(this).children(':first').text().toLowerCase() )
+					sw = false
+			});
+
+			// Si no es repetido
+			if( sw )
+			{
+				// Agrega la palabra censurada en la base de datos y en el DOM
+				addWordInDB( word.toLowerCase() );
+			} // end if
+			
 		}
 
 		// Reestablece el valor del input y hace focus en el
@@ -95,6 +134,12 @@ $(document).on( 'ready', function(){
 	$('.hashtag-delete-confirm').on( 'click', function(){
 		deleteHashtagInDB();
 		$('td#' + idHashtag ).parent().remove();
+
+		if( $('#hashtag-list tbody').children( 'tr' ).length == 0 )
+		{
+			$('#no-hashtag').css({'display':'block'});
+		} // end if
+
 		$('body').unblock();
 	});
 
@@ -106,6 +151,7 @@ $(document).on( 'ready', function(){
 */
 
 function addHashtag( idHashtag, hashtag ){
+	$('#no-hashtag').css({'display':'none'});
 	//console.log( idHashtag );
 	$('#hashtag-list').append( '<tr>' +
 							    '<td id="' + idHashtag + '">' + hashtag + '</td>' +                  

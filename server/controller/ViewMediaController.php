@@ -167,7 +167,7 @@ class ViewMediaController extends ControllerAJAX {
 						);
 
 			// Si es la primera llamada
-			if( $firstTime )
+			if( $firstTime || ( ! $this->myMedia->existRegisters( $idHashtag ) ) )
 			{
 				$gotAllResults = false;
 			    $photos = array();
@@ -195,7 +195,7 @@ class ViewMediaController extends ControllerAJAX {
 				//Guarda el payload en la base de datos
 				$this->myMedia->saveInstagramPhotos( $photos, $tag, $idHashtag );
 
-				return;
+				continue;
 			} // end if
 
 
